@@ -1,0 +1,52 @@
+a:link {
+    color: green;
+    background-color: white;
+    text-decoration: none;
+	font-size: 30px;
+}
+a:visited {
+    color: green;
+    background-color: white;
+    text-decoration: none;
+}
+a:hover {
+    color: red;
+    background-color: white;
+    text-decoration: underline;
+}
+a:active {
+    color: yellow;
+    background-color: white;
+    text-decoration: underline;
+}
+body
+{
+background-color:#EFEFEB;
+}
+h1
+{
+color:#000;
+font-size:102px;
+background-color:#DFDFDF;
+font-family: Cambria, "Hoefler Text", "Liberation Serif", Times, "Times New Roman", "serif"
+}
+div{width:1985px;
+height:75px;
+background-color:#003300;
+font-size:40px;
+color:white;
+font-family:impact;
+}
+h2
+{
+color:white;
+font-size:90px;
+}
+div *
+{
+border:0.2em solid red
+}
+link
+{
+color:black
+}
