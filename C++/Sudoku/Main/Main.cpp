@@ -7,7 +7,7 @@ using namespace std;
 /*=====prototypes=====*/
 void gatherNumbers(char **num); //inputs numbers into a dynamic array 
 void display(char **num); //displays the actual puzzle
-void getSelection(); //gets keyboard input and moves selection around
+void displaySelection(char **num); //gets keyboard input and moves selection around
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 bool escapePressed = false; //I know this is sloppy, but it works so great....
 
@@ -28,7 +28,7 @@ int main()
 	{
 		system("cls");
 		display(num);
-		getSelection();
+		displaySelection(num);
 		
 	
 		//do more stuff
@@ -48,16 +48,13 @@ int main()
 	
 	
 	
-	
-	
-	
 /*======deallocating dynamic array======*/
 for(int i = 0; i < 9; ++i){delete [] num[i];}
 delete [] num;	
 	
 return 0;
 }
-void getSelection()
+void displaySelection(char **num)
 {
 	int xCoord = 0; //x coordinate for selection
 	int yCoord = 0; //y coordinate for selection
@@ -67,25 +64,35 @@ void getSelection()
 	if(val==27){escapePressed = true;}
 	
 	/*====== W key ======*/
-	if(val==119)
+	if(val==119) //yCoord
 	{
-		cout<<"W key was pressed!"<<endl;
+		//cout<<"W key was pressed!"<<endl;
+		while(num[yCoord][xCoord]!=' '){yCoord++;} //move selection up while the square is not blank
+		
+		if(yCoord==0){yCoord=8;} //if the selection is on the top, move it down
+		
+		else{yCoord++;} //otherwise, move it up
 	}
 	/*====== A Key ======*/
-	if(val==97)
+	if(val==97)//xCoord
 	{
 		cout<<"A key was pressed!"<<endl;
+		
 	}
 	/*====== S Key ======*/
-	if(val==115)
+	if(val==115)//yCoord
 	{
 		cout<<"S key was pressed"<<endl;
+		
 	}
 	/*====== D Key ======*/
-	if(val==100)
+	if(val==100)//xCoord
 	{
 		cout<<"D key was pressed"<<endl;
+		
 	}
+	num[yCoord][xCoord] = 'X';
+	
 	
 }
 
