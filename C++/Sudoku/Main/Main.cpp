@@ -60,19 +60,38 @@ void displaySelection(char **num)
 	int yCoord = 0; //y coordinate for selection
 	int val; //value to store key 
 	
-	val = getch();
-	if(val==27){escapePressed = true;}
+	int possibleX = 0; //used to index while loops that check for possible values for x and y
+	int possibleY = 0; //same as above
+	
+	val = getch(); //get value for key pressed 
+	if(val==27){escapePressed = true;} //can you really not tell what this does?
+	
+	bool canItMove = false;
 	
 	/*====== W key ======*/
 	if(val==119) //yCoord
 	{
-		//cout<<"W key was pressed!"<<endl;
-		while(num[yCoord][xCoord]!=' '){yCoord++;} //move selection up while the square is not blank
 		
-		if(yCoord==0){yCoord=8;} //if the selection is on the top, move it down
+		/*yCoord++; //move it up
+		//if(yCoord==0){yCoord=8;cout<<"I ruined everthing!";} //if the selection is on the top, move it down
+		if(yCoord==8){yCoord=0;cout<<"I am getting work done";}
+		while(num[yCoord][xCoord]!=' '){yCoord++;} //move selection up while the square is not blank*/
+		/*do{
+			if(num[yCoord][xCoord]!=' '){yCoord++;}
+			if(num[yCoord][xCoord]==' '){canItMove=true; num[yCoord][xCoord] = 'X';}
+		}while(canItMove==false);*/
+		while(num[yCoord][xCoord]!=' '){yCoord++;}
+		do
+		{
+			if(num[possibleY][possibleX] != ' '){possibleY++;}
+			if(num[possibleY][possibleX] == ' '){canItMove=true;}
+		}
+		while(canItMove==false);
+		if(canItMove==true)
+		{
+			while(num
+		}
 		
-		else{yCoord++;} //otherwise, move it up
-	}
 	/*====== A Key ======*/
 	if(val==97)//xCoord
 	{
@@ -91,9 +110,7 @@ void displaySelection(char **num)
 		cout<<"D key was pressed"<<endl;
 		
 	}
-	num[yCoord][xCoord] = 'X';
-	
-	
+	cout<<yCoord;
 }
 
 
