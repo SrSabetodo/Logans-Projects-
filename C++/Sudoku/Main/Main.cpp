@@ -9,21 +9,27 @@ void gatherNumbers(char **num); //inputs numbers into a dynamic array
 void display(char **num); //displays the actual puzzle
 void displaySelection(char **num); //gets keyboard input and moves selection around
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
+
 bool escapePressed = false; //I know this is sloppy, but it works so great....
+char lastNum; //is this sloppy.. yes.. but does it work.. yes..
+
+int previousX = 0;
+int previousY = 0;
 
 int main()
 {
-	/*====== for some reason this somehow works=====*/
-	char **num = new char*[9];
-	for(int i=0;i<9;i++){num[i] = new char[9];}
 	/*======== Declarations ========*/
+	char **num = new char*[9];
+	for(int i=0;i<9;i++){num[i] = new char[9];} //create the dynamic 2D array
 	
-
-
-	/*======= end declarations ======*/
+	//char* lastNum = new char; //variable to store the value of previous selection
+	
+	/*====== end declarations ======*/
 	
 	gatherNumbers(num); //get this started first and out of the way 
+	lastNum = num[0][0];
 	
+
 	do
 	{
 		system("cls");
@@ -54,33 +60,40 @@ delete [] num;
 	
 return 0;
 }
+
+
+
 void displaySelection(char **num)
 {
 	int xCoord = 0; //x coordinate for selection
 	int yCoord = 0; //y coordinate for selection
 	int val; //value to store key 
 	
-	int possibleX = 0; //used to index while loops that check for possible values for x and y
-	int possibleY = 0; //same as above
-	
 	val = getch(); //get value for key pressed 
 	if(val==27){escapePressed = true;} //can you really not tell what this does?
 	
-	bool canItMove = false;
+	//num[previousY][previousX] = lastNum;
 	
 	/*====== W key ======*/
 	if(val==119) //yCoord
 	{
+		while(yCoord!=' '){yCoord+=1;}
 		
-		/*yCoord++; //move it up
+		
+		
+		//if(yCoord==7){cout<<"I was 8";}
+		//if((yCoord!=7)&&((yCoord==0)||(yCoord==1)||(yCoord==2)||(yCoord==3)||(yCoord==4)||(yCoord==5)||(yCoord==6)||(yCoord==7))){yCoord++;} //move it up
 		//if(yCoord==0){yCoord=8;cout<<"I ruined everthing!";} //if the selection is on the top, move it down
-		if(yCoord==8){yCoord=0;cout<<"I am getting work done";}
-		while(num[yCoord][xCoord]!=' '){yCoord++;} //move selection up while the square is not blank*/
+		//while(num[yCoord][xCoord]!=' '){yCoord++;} //move selection up while the square is not blank
+		
+		
+		
 		/*do{
 			if(num[yCoord][xCoord]!=' '){yCoord++;}
 			if(num[yCoord][xCoord]==' '){canItMove=true; num[yCoord][xCoord] = 'X';}
 		}while(canItMove==false);*/
-		while(num[yCoord][xCoord]!=' '){yCoord++;}
+		
+		/*while(num[yCoord][xCoord]!=' '){yCoord++;}
 		do
 		{
 			if(num[possibleY][possibleX] != ' '){possibleY++;}
@@ -91,28 +104,34 @@ void displaySelection(char **num)
 		{
 			while(num
 		}
-		
+		*/
+	}	
 	/*====== A Key ======*/
 	if(val==97)//xCoord
-	{
+		{
 		cout<<"A key was pressed!"<<endl;
 		
-	}
+		}
 	/*====== S Key ======*/
 	if(val==115)//yCoord
-	{
+		{
 		cout<<"S key was pressed"<<endl;
 		
-	}
+		}
 	/*====== D Key ======*/
 	if(val==100)//xCoord
-	{
+		{
 		cout<<"D key was pressed"<<endl;
-		
-	}
-	cout<<yCoord;
+		}
+	//cout<<yCoord<<endl;
+	//lastNum = num[yCoord][xCoord];
+	num[yCoord][xCoord] = 'X';
+	
+	previousX = xCoord;
+	previousY = yCoord;
+	
+	
 }
-
 
 
 void display(char** num)
