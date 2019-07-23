@@ -72,12 +72,13 @@ void displaySelection(char **num)
 	val = getch(); //get value for key pressed 
 	if(val==27){escapePressed = true;} //can you really not tell what this does?
 	
-	//num[previousY][previousX] = lastNum;
+	//num[previousY][previo usX] = lastNum;
 	
 	/*====== W key ======*/
 	if(val==119) //yCoord
 	{
-		while(yCoord!=' '){yCoord+=1;}
+		if(num[yCoord][xCoord] == ' '){yCoord++;}
+		else{while(yCoord!=' '){yCoord++;}}
 		
 		
 		
@@ -125,6 +126,7 @@ void displaySelection(char **num)
 		}
 	//cout<<yCoord<<endl;
 	//lastNum = num[yCoord][xCoord];
+	
 	num[yCoord][xCoord] = 'X';
 	
 	previousX = xCoord;
