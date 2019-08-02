@@ -47,7 +47,7 @@ int main()
 		
 		
 		sleep_seconds(250);
-	}while(escapePressed!=true);
+	}while(escapePressed != true);
 	
 	
 /*======deallocating dynamic array======*/
@@ -151,17 +151,18 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	prevX.push_back(xCoord); //add current Xcoord to end of vector
 	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
-	if( (val!=(119)) && (val!=(97)) && (val!=(115)) && (val!=(100)) && (val!=(27)) )
+	if(counter!=0) //only run this after the first run
 	{
-	
-	enterSelection(num, counter, prevX, prevY, val);
-	didIPlaceAValue = true;
+		if(num[(prevY[counter-1])-1][prevX[counter-1]] == 'X')
+		{
+			num[(prevY[counter-1])-1][prevX[counter-1]] = ' ';
+		}
+		
 	}
 	
-	if( (counter!=0) && (didIPlaceAValue == false) ) //only run this after the first run
+	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) ) //if any key other than WASD is pressed 
 	{
-		if(didIPlaceAValue == false){cout<<"I shouldn't have run!";}
-		num[(prevY[counter-1])-1][prevX[counter-1]] = ' ';
+		enterSelection(num, counter, prevX, prevY, val); //input that key into the array 
 	}
 	
 	counter++; //increment the counter so it will only equal 0 once
