@@ -11,7 +11,10 @@ void gatherNumbers(char **num); //inputs numbers into a dynamic array
 void display(char **num); //displays the actual puzzle
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val); //function to input user values
+bool isValid (char** num, int &xCoord, int &yCoord); //evaluates numbers inputted
+
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
+
 
 bool escapePressed = false; //I know this is sloppy, but it works so great....
 
@@ -61,9 +64,19 @@ return 0;
 
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter)
 {
+	// this function is huge and could probably be broken up more, but alas, I'm too lazy
+	
+	// displaySelection is tasked with accepting the num arrray, x and y coordinates, vectors and counter
+	// the function determines the key pressed based on its value returned from the getch() function 
+	// it then determines if the selection can be moved to the desired location, and if it cannot,
+	// a series of loops determine the closest valid location that an X can be put 
+	// next, the function adds previous x and y coordinates to their respective vectors, and 
+	// uses the vector along with the counter to determine what the previous x and y coordinates were, 
+	// and replaces them with a blank space again
+	
 	
 	int val; //value to store key 
-	bool didIPlaceAValue = false;
+	bool canThisWork = false;
 	
 	
 	val = getch(); //get value for key pressed 
@@ -153,9 +166,9 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	
 	if(counter!=0) //only run this after the first run
 	{
-		if(num[(prevY[counter-1])-1][prevX[counter-1]] == 'X')
+		if(num[(prevY[counter-1])-1][prevX[counter-1]] == 'X') //if previous number is an X 
 		{
-			num[(prevY[counter-1])-1][prevX[counter-1]] = ' ';
+			num[(prevY[counter-1])-1][prevX[counter-1]] = ' '; //'Make That Space Blank Again!' 
 		}
 		
 	}
@@ -163,6 +176,9 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) ) //if any key other than WASD is pressed 
 	{
 		enterSelection(num, counter, prevX, prevY, val); //input that key into the array 
+		canThisWork = isValid(num, xCoord, yCoord);
+		if(canThisWork == false){cout<<"This wenked!";}
+		else if(canThisWork == true){cout<<"This actually worked!";}
 	}
 	
 	counter++; //increment the counter so it will only equal 0 once
@@ -170,6 +186,9 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val)
 {
+	// this function is called when a number key is pressed, and takes that key 
+	// and inputs that key pressed into the 2D array
+	
 	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1';}
 	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2';}
 	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3';}
@@ -183,9 +202,40 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 }
 
+bool isValid (char** num, int &xCoord, int &yCoord)
+{
+	//function to determine if the inputted number is valid 
+	// will use nested for loops to check if there are any other numbers 
+	// will check all values of yCoord and xCoord to determine if there is exactly one of these numbers
+	
+	char var = num[yCoord-1][xCoord]; 
+	char tester = false;
+	
+		for(int s=0;s<9;s++)
+		{
+			if(num[yCoord-1][s] == var)
+			{
+				tester = true;
+			}
+		}
+		
+		for(int y=1;y<10;y++)
+		{
+			if(num[y][xCoord] == var)
+			{
+				tester == true;
+			}
+		}
+	
+	if(tester==true){return false;}
+	else{return true;}
+}
+
 void display(char** num)
 {
-	//system("cls"); //clear screen first 
+	// this function displays the body of the sudoku, along with the values stored inside the multidimensional array,
+	// and arranges them into a proper looking sudoku
+	
 	system("Color 70"); //set background to white and text to black
 	
 	/*=====I'm not going to bother explaining how this bit works=====*/
@@ -211,7 +261,8 @@ void display(char** num)
 
 void gatherNumbers(char **num) //reads numbers from a text file and adds them to the array 
 {
-	//I don't care if this code is slightly broken.. it works..
+	// this function reads 81 numbers off of a text file, and intreprets the 0s into blank spaces 
+	// and adds them into the array
 	
 	ifstream myFile; //ifstream object
 	
