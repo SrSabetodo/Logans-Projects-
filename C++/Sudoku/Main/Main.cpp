@@ -3,12 +3,14 @@
 #include <fstream>
 #include <windows.h>
 #include <cmath>
+#include <vector>
 using namespace std;
 
 /*=====prototypes=====*/
 void gatherNumbers(char **num); //inputs numbers into a dynamic array 
 void display(char **num); //displays the actual puzzle
-void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &prevY, int &counter); //gets keyboard input and moves selection around
+void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
+void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val); //function to input user values
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 
 bool escapePressed = false; //I know this is sloppy, but it works so great....
@@ -20,12 +22,12 @@ int main()
 	for(int i=0;i<9;i++){num[i] = new char[9];} //create the dynamic 2D array
 	
 	int xCoord = 0; //x coordinate for selection
-	int yCoord = 0; //y coordinate for selection
+	int yCoord = 1; //y coordinate for selection
 	
-	int prevX = 0; //previous coordinates to replace X's 
-	int prevY = 0; //previous coordinates to replace X's 
+	vector<int> prevY;
+	vector<int> prevX;
 	
-	int counter = 0; //using this 
+	int counter = 0; //using this to single out when program is running on its first time
 	
 	/*====== end declarations ======*/
 	
@@ -37,14 +39,14 @@ int main()
 	{
 		system("cls");
 		display(num);
-		displaySelection(num, xCoord, yCoord, prevX, prevY, counter);
+		displaySelection(num, xCoord, yCoord, prevY, prevX, counter);
 		
 	
 		//do more stuff
 		
 		
 		
-		sleep_seconds(400);
+		sleep_seconds(250);
 	}while(escapePressed!=true);
 	
 	
@@ -57,10 +59,12 @@ return 0;
 
 
 
-void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &prevY, int &counter)
+void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter)
 {
 	
 	int val; //value to store key 
+	bool didIPlaceAValue = false;
+	
 	
 	val = getch(); //get value for key pressed 
 	if(val==27){escapePressed = true;} //can you really not tell what this does?
@@ -80,12 +84,12 @@ void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &pre
 	{
 		yCoord--;
 		
-		if(num[yCoord-1][xCoord]!=' ')
+		if(num[yCoord-1][xCoord]!=' ') //if index value isn't a space, keep moving
 		{
 			do
 			{
 				yCoord--; 
-				if(yCoord < 1){yCoord = 9;}
+				if(yCoord < 1){yCoord = 9;} // move yCoord over to the other side if it runs out of room here
 			}
 			while(num[yCoord-1][xCoord]!=' ');
 		}
@@ -100,7 +104,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &pre
 			do
 			{
 				xCoord--;
-				if(xCoord < 0){xCoord = 0;}
+				if(xCoord < 0){xCoord = 9;}
 				
 			}
 			while(num[yCoord-1][xCoord]!=' ');
@@ -118,7 +122,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &pre
 			{
 				yCoord++;
 				if(yCoord > 9){yCoord = 1;}
-			}	d
+			}	
 			while(num[abs(yCoord-1)][xCoord]!=' ');
 		}
 	}
@@ -139,47 +143,43 @@ void displaySelection(char **num, int &xCoord, int &yCoord, int &prevX, int &pre
 		}
 	}
 	
-	cout<<"X Value: "<<xCoord<<endl;
+	cout<<"X Value: "<<xCoord<<endl; //keep these here for now cause they're pretty
 	cout<<"Y Value: "<<yCoord<<endl;
+	
 	num[yCoord-1][xCoord] = 'X';
 	
+	prevX.push_back(xCoord); //add current Xcoord to end of vector
+	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
-	//cout<<"Counter = "<<counter<<endl;
-	
-	/*Controlling the previous movements*/
-	
-	/*if(counter!=0) //using this so it will only run the first time
+	if( (val!=(119)) && (val!=(97)) && (val!=(115)) && (val!=(100)) && (val!=(27)) )
 	{
-		// w key
-		if((counter!=0) && (val==119))
-		{
-			prevX = xCoord; //X coordinates here should remain constant
-			if(yCoord==0)
-			{
-				prevY = 9; 
-				do
-				{
-					prevY--;
-				}while(num[prevY-1][prevX]!=' ');
-			} 
-			else if(yCoord!=0)
-			{
-			
-				do
-				{
-					prevY = yCoord + 1;
-				}while(num[prevY-1][prevX]!=' ');
-			}
-			// s key
 	
-			// a key
+	enterSelection(num, counter, prevX, prevY, val);
+	didIPlaceAValue = true;
+	}
 	
-			// d key
-		}
-		num[prevY-1][prevX] = ' ';
-	}*/
+	if( (counter!=0) && (didIPlaceAValue == false) ) //only run this after the first run
+	{
+		if(didIPlaceAValue == false){cout<<"I shouldn't have run!";}
+		num[(prevY[counter-1])-1][prevX[counter-1]] = ' ';
+	}
 	
-	counter++; //increment the counter so it will only run once
+	counter++; //increment the counter so it will only equal 0 once
+}
+
+void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val)
+{
+	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1';}
+	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2';}
+	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3';}
+	else if(val == 52){num[(prevY[counter-1])-1][prevX[counter-1]] = '4';}
+	else if(val == 53){num[(prevY[counter-1])-1][prevX[counter-1]] = '5';}
+	else if(val == 54){num[(prevY[counter-1])-1][prevX[counter-1]] = '6';}
+	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7';}
+	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8';}
+	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9';}
+	
+	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 }
 
 void display(char** num)
