@@ -10,7 +10,7 @@ using namespace std;
 void gatherNumbers(char **num); //inputs numbers into a dynamic array 
 void display(char **num); //displays the actual puzzle
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
-void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val); //function to input user values
+void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &xCoord, int &yCoord); //function to input user values
 bool isValid (char** num, int &xCoord, int &yCoord); //evaluates numbers inputted
 
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
@@ -49,7 +49,7 @@ int main()
 		
 		
 		
-		sleep_seconds(250);
+		sleep_seconds(450);
 	}while(escapePressed != true);
 	
 	
@@ -66,7 +66,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 {
 	// this function is huge and could probably be broken up more, but alas, I'm too lazy
 	
-	// displaySelection is tasked with accepting the num arrray, x and y coordinates, vectors and counter
+	// displaySelection is tasked with accepting the num array, x and y coordinates, vectors and counter
 	// the function determines the key pressed based on its value returned from the getch() function 
 	// it then determines if the selection can be moved to the desired location, and if it cannot,
 	// a series of loops determine the closest valid location that an X can be put 
@@ -76,12 +76,9 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	
 	
 	int val; //value to store key 
-	bool canThisWork = false;
-	
 	
 	val = getch(); //get value for key pressed 
 	if(val==27){escapePressed = true;} //can you really not tell what this does?
-	
 	
 	/*====== Keeping things inside the bounds ======*/
 	if((yCoord > 8) && (val==115)){yCoord=0;} //for S key
@@ -175,19 +172,18 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	
 	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) ) //if any key other than WASD is pressed 
 	{
-		enterSelection(num, counter, prevX, prevY, val); //input that key into the array 
-		canThisWork = isValid(num, xCoord, yCoord);
-		if(canThisWork == false){cout<<"This wenked!";}
-		else if(canThisWork == true){cout<<"This actually worked!";}
+		enterSelection(num, counter, prevX, prevY, val, xCoord, yCoord); //input that key into the array 
 	}
 	
 	counter++; //increment the counter so it will only equal 0 once
 }
 
-void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val)
+void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &yCoord, int &xCoord)
 {
 	// this function is called when a number key is pressed, and takes that key 
 	// and inputs that key pressed into the 2D array
+	
+	bool canThisWork;
 	
 	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1';}
 	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2';}
@@ -200,6 +196,11 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9';}
 	
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
+	
+	canThisWork = isValid(num, xCoord, yCoord); //call this bool function and assign the value to the variable
+	
+	if(canThisWork == false){cout<<"This wenked!";}
+	else if(canThisWork == true){cout<<"This actually worked!";}
 }
 
 bool isValid (char** num, int &xCoord, int &yCoord)
@@ -209,13 +210,16 @@ bool isValid (char** num, int &xCoord, int &yCoord)
 	// will check all values of yCoord and xCoord to determine if there is exactly one of these numbers
 	
 	char var = num[yCoord-1][xCoord]; 
-	char tester = false;
+	char first = false;
+	char second = false;
 	
 		for(int s=0;s<9;s++)
 		{
 			if(num[yCoord-1][s] == var)
 			{
-				tester = true;
+				cout<<num[yCoord-1][s]<<endl;
+				first = true;
+				cout<<"First check is clear"<<endl;
 			}
 		}
 		
@@ -223,12 +227,14 @@ bool isValid (char** num, int &xCoord, int &yCoord)
 		{
 			if(num[y][xCoord] == var)
 			{
-				tester == true;
+				second == true;
+				cout<<"Second check is clear"<<endl;
 			}
 		}
-	
-	if(tester==true){return false;}
-	else{return true;}
+		
+	cout<<num[yCoord-1][xCoord]<<endl;
+	if((first == true) && (second == true)) {return true;}
+	else {return false;}
 }
 
 void display(char** num)
