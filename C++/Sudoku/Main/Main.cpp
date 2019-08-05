@@ -11,7 +11,7 @@ void gatherNumbers(char **num); //inputs numbers into a dynamic array
 void display(char **num); //displays the actual puzzle
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &xCoord, int &yCoord); //function to input user values
-bool isValid (char** num, int &xCoord, int &yCoord); //evaluates numbers inputted
+bool isValid (char** num, int &xCoord, int &yCoord, int val); //evaluates numbers inputted
 
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 
@@ -182,58 +182,57 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 {
 	// this function is called when a number key is pressed, and takes that key 
 	// and inputs that key pressed into the 2D array
-	
+	int retVal; 
 	bool canThisWork;
 	
-	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1';}
-	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2';}
-	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3';}
-	else if(val == 52){num[(prevY[counter-1])-1][prevX[counter-1]] = '4';}
-	else if(val == 53){num[(prevY[counter-1])-1][prevX[counter-1]] = '5';}
-	else if(val == 54){num[(prevY[counter-1])-1][prevX[counter-1]] = '6';}
-	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7';}
-	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8';}
-	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9';}
+	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1'; retVal = 1;}
+	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2'; retVal = 2;}
+	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3'; retVal = 3;}
+	else if(val == 52){num[(prevY[counter-1])-1][prevX[counter-1]] = '4'; retVal = 4;}
+	else if(val == 53){num[(prevY[counter-1])-1][prevX[counter-1]] = '5'; retVal = 5;}
+	else if(val == 54){num[(prevY[counter-1])-1][prevX[counter-1]] = '6'; retVal = 6;}
+	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7'; retVal = 7;}
+	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = 8;}
+	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = 9;}
 	
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 	
-	canThisWork = isValid(num, xCoord, yCoord); //call this bool function and assign the value to the variable
+	canThisWork = isValid(num, xCoord, yCoord, retVal); //call this bool function and assign the value to the variable
 	
 	if(canThisWork == false){cout<<"This wenked!";}
 	else if(canThisWork == true){cout<<"This actually worked!";}
 }
 
-bool isValid (char** num, int &xCoord, int &yCoord)
+bool isValid (char** num, int &xCoord, int &yCoord, int val)
 {
 	//function to determine if the inputted number is valid 
 	// will use nested for loops to check if there are any other numbers 
 	// will check all values of yCoord and xCoord to determine if there is exactly one of these numbers
 	
-	char var = num[yCoord-1][xCoord]; 
+	char var = val;
 	char first = false;
 	char second = false;
 	
 		for(int s=0;s<9;s++)
 		{
-			if(num[yCoord-1][s] == var)
+			if(num[s][yCoord-1] == var)
 			{
-				cout<<num[yCoord-1][s]<<endl;
 				first = true;
-				cout<<"First check is clear"<<endl;
 			}
+			cout<<"first check"<<num[s][yCoord-1<<endl;
 		}
 		
 		for(int y=1;y<10;y++)
 		{
-			if(num[y][xCoord] == var)
+			if(num[xCoord][y-1] == var)
 			{
 				second == true;
-				cout<<"Second check is clear"<<endl;
 			}
+			cout<<"second check"<<num[xCoord][y-1]<<endl;
 		}
 		
-	cout<<num[yCoord-1][xCoord]<<endl;
-	if((first == true) && (second == true)) {return true;}
+	if((first == false) && (second == false)) {return true;}
+	
 	else {return false;}
 }
 
