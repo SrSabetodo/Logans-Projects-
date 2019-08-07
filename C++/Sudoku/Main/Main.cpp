@@ -219,7 +219,7 @@ bool isValid (char** num, int &xCoord, int &yCoord, int val)
 			{
 				first = true;
 			}
-			cout<<"first check"<<num[s][yCoord-1<<endl;
+			cout<<"first check"<<num[s][yCoord-1]<<endl;
 		}
 		
 		for(int y=1;y<10;y++)
