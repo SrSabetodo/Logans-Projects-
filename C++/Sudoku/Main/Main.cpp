@@ -12,6 +12,7 @@ void display(char **num); //displays the actual puzzle
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &xCoord, int &yCoord); //function to input user values
 bool isValid (char** num, int &xCoord, int &yCoord, char val); //evaluates numbers inputted
+void backspacePressed(char** num);
 
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 
@@ -175,6 +176,10 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		enterSelection(num, counter, prevX, prevY, val, xCoord, yCoord); //input that key into the array 
 	}
 	
+	if(val == 8)
+	{
+		backspacePressed(num);
+	}
 	counter++; //increment the counter so it will only equal 0 once
 }
 
@@ -194,6 +199,7 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7'; retVal = '7';}
 	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = '8';}
 	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = '9';}
+	
 	
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 	
@@ -240,6 +246,27 @@ bool isValid (char** num, int &xCoord, int &yCoord, char val)
 	if((first == false) && (second == false)) {return true;}
 	
 	else {return false;}
+}
+
+void backspacePressed(char** num)
+{
+	int x = 0;
+	int y = 1;
+	
+	bool canThisWork = false;
+	
+	do
+	{
+		if(num[y-1][x] == ' '){canThisWork = true; }
+		
+		else{x++;}
+		
+		if(x > 9){y++; x = 0;}
+		
+	}while(canThisWork == false);
+
+	num[y-1][x] = 'X';
+
 }
 
 void display(char** num)
