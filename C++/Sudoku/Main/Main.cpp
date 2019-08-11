@@ -11,7 +11,7 @@ void gatherNumbers(char **num); //inputs numbers into a dynamic array
 void display(char **num); //displays the actual puzzle
 void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &xCoord, int &yCoord); //function to input user values
-bool isValid (char** num, int &xCoord, int &yCoord, int val); //evaluates numbers inputted
+bool isValid (char** num, int &xCoord, int &yCoord, char val); //evaluates numbers inputted
 
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 
@@ -156,12 +156,12 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	cout<<"X Value: "<<xCoord<<endl; //keep these here for now cause they're pretty
 	cout<<"Y Value: "<<yCoord<<endl;
 	
-	num[yCoord-1][xCoord] = 'X';
+	num[yCoord-1][xCoord] = 'X'; //set these coordinates to an X 
 	
 	prevX.push_back(xCoord); //add current Xcoord to end of vector
 	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
-	if(counter!=0) //only run this after the first run
+	if(counter!=0) //only run this after the first run as it will break otherwise
 	{
 		if(num[(prevY[counter-1])-1][prevX[counter-1]] == 'X') //if previous number is an X 
 		{
@@ -182,55 +182,61 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 {
 	// this function is called when a number key is pressed, and takes that key 
 	// and inputs that key pressed into the 2D array
-	int retVal; 
+	char retVal; 
 	bool canThisWork;
 	
-	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1'; retVal = 1;}
-	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2'; retVal = 2;}
-	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3'; retVal = 3;}
-	else if(val == 52){num[(prevY[counter-1])-1][prevX[counter-1]] = '4'; retVal = 4;}
-	else if(val == 53){num[(prevY[counter-1])-1][prevX[counter-1]] = '5'; retVal = 5;}
-	else if(val == 54){num[(prevY[counter-1])-1][prevX[counter-1]] = '6'; retVal = 6;}
-	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7'; retVal = 7;}
-	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = 8;}
-	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = 9;}
+	if     (val == 49){num[(prevY[counter-1])-1][prevX[counter-1]] = '1'; retVal = '1';}
+	else if(val == 50){num[(prevY[counter-1])-1][prevX[counter-1]] = '2'; retVal = '2';}
+	else if(val == 51){num[(prevY[counter-1])-1][prevX[counter-1]] = '3'; retVal = '3';}
+	else if(val == 52){num[(prevY[counter-1])-1][prevX[counter-1]] = '4'; retVal = '4';}
+	else if(val == 53){num[(prevY[counter-1])-1][prevX[counter-1]] = '5'; retVal = '5';}
+	else if(val == 54){num[(prevY[counter-1])-1][prevX[counter-1]] = '6'; retVal = '6';}
+	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7'; retVal = '7';}
+	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = '8';}
+	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = '9';}
 	
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 	
 	canThisWork = isValid(num, xCoord, yCoord, retVal); //call this bool function and assign the value to the variable
 	
-	if(canThisWork == false){cout<<"This wenked!";}
-	else if(canThisWork == true){cout<<"This actually worked!";}
+	if(canThisWork == false){ num[(prevY[counter-1])-1][prevX[counter-1]] = ' '; system("cls");}
 }
 
-bool isValid (char** num, int &xCoord, int &yCoord, int val)
+bool isValid (char** num, int &xCoord, int &yCoord, char val)
 {
 	//function to determine if the inputted number is valid 
 	// will use nested for loops to check if there are any other numbers 
 	// will check all values of yCoord and xCoord to determine if there is exactly one of these numbers
 	
-	char var = val;
-	char first = false;
-	char second = false;
+	bool first = false;
+	bool second = false;
+	
+	int actualY = xCoord;
+	int actualX = yCoord;
+	
+	int firstTrues = 0;
+	int secondTrues = 0;
 	
 		for(int s=0;s<9;s++)
 		{
-			if(num[s][yCoord-1] == var)
+			if(num[s][actualX] == val)
 			{
-				first = true;
+				firstTrues++;
 			}
-			cout<<"first check"<<num[s][yCoord-1]<<endl;
 		}
+		
+	if(firstTrues > 1){first=true;}
 		
 		for(int y=1;y<10;y++)
 		{
-			if(num[xCoord][y-1] == var)
+			if(num[actualY-1][y] == val)
 			{
-				second == true;
+				secondTrues++;
 			}
-			cout<<"second check"<<num[xCoord][y-1]<<endl;
 		}
 		
+	if(secondTrues > 1){second = true;}
+	
 	if((first == false) && (second == false)) {return true;}
 	
 	else {return false;}
