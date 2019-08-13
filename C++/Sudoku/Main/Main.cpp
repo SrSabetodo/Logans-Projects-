@@ -176,10 +176,16 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		enterSelection(num, counter, prevX, prevY, val, xCoord, yCoord); //input that key into the array 
 	}
 	
-	if(val == 8)
+	
+	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) && (val!=49) && (val!=50) && (val!=51) && (val!=52) && (val!=53) && (val!=54) && (val!=55) && (val!=56) && (val!=57) && (val!=27) && (val!=8) )
 	{
-		backspacePressed(num);
+		cout<<"Please enter a valid key"<<endl;
 	}
+	
+	
+	
+	
+	
 	counter++; //increment the counter so it will only equal 0 once
 }
 
@@ -187,6 +193,7 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 {
 	// this function is called when a number key is pressed, and takes that key 
 	// and inputs that key pressed into the 2D array
+	
 	char retVal; 
 	bool canThisWork;
 	
@@ -200,6 +207,10 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = '8';}
 	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = '9';}
 	
+	else if(val == 8)
+	{
+		backspacePressed(num);
+	}
 	
 	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 	
@@ -259,7 +270,7 @@ void backspacePressed(char** num)
 	{
 		if(num[y-1][x] == ' '){canThisWork = true; }
 		
-		else{x++;}
+		else {x++;}
 		
 		if(x > 9){y++; x = 0;}
 		
