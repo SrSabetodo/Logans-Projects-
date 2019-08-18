@@ -91,7 +91,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	/*Keys controlling the movement of current selection*/
 	
 	/*====== W key ======*/
-	if(val==119) //yCoord
+	if((val==119) || (val==87)) //yCoord
 	{
 		yCoord--;
 		
@@ -106,7 +106,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		}
 	}	
 	/*====== A Key ======*/
-	if(val==97)//xCoord
+	if((val==97) || (val==65))//xCoord
 	{
 		xCoord--;
 		
@@ -122,7 +122,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		}
 	}
 	/*====== S Key ======*/
-	if(val==115)//yCoord
+	if((val==115) || (val==83))//yCoord
 	{
 		
 		yCoord++;
@@ -138,7 +138,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		}
 	}
 	/*====== D Key ======*/
-	if(val==100)//xCoord
+	if((val==100) || (val==68))//xCoord
 	{
 		
 		xCoord++;
@@ -171,13 +171,13 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		
 	}
 	
-	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) ) //if any key other than WASD is pressed 
+	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) && (val!=87) && (val!=65) && (val!=83) && (val!=68) ) //if any key other than WASD is pressed 
 	{
 		enterSelection(num, counter, prevX, prevY, val, xCoord, yCoord); //input that key into the array 
 	}
 	
 	
-	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) && (val!=49) && (val!=50) && (val!=51) && (val!=52) && (val!=53) && (val!=54) && (val!=55) && (val!=56) && (val!=57) && (val!=27) && (val!=8) )
+	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) && (val!=49) && (val!=50) && (val!=51) && (val!=52) && (val!=53) && (val!=54) && (val!=55) && (val!=56) && (val!=57) && (val!=27) && (val!=8) && (val!=87) && (val!=65) && (val!=83) && (val!=68) )
 	{
 		cout<<"Please enter a valid key"<<endl;
 	}
@@ -212,7 +212,7 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 		backspacePressed(num);
 	}
 	
-	else{cout<<"Please enter a valid key"<<endl; val = getch();}
+	else{cout<<"Please enter aN valid key"<<endl; val = getch();}
 	
 	canThisWork = isValid(num, xCoord, yCoord, retVal); //call this bool function and assign the value to the variable
 	
