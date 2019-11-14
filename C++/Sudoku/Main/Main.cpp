@@ -9,10 +9,10 @@ using namespace std;
 /*=====prototypes=====*/
 void gatherNumbers(char **num); //inputs numbers into a dynamic array 
 void display(char **num); //displays the actual puzzle
-void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter); //gets keyboard input and moves selection around
+void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter, vector<int> &backX, vector<int> &backY); //gets keyboard input and moves selection around
 void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &prevY, int val, int &xCoord, int &yCoord); //function to input user values
 bool isValid (char** num, int &xCoord, int &yCoord, char val); //evaluates numbers inputted
-void backspacePressed(char** num);
+void backspacePressed(char** num, vector<int> &backX, vector<int> &backY, int &counter); //used to cycle through avaliable spaces once board fills up
 
 void sleep_seconds (const unsigned int sleepMSs) {Sleep(sleepMSs); } //makes everything look better
 
@@ -30,6 +30,9 @@ int main()
 	
 	vector<int> prevY;
 	vector<int> prevX;
+
+	vector<int> backY;
+	vector<int> backX;
 	
 	int counter = 0; //using this to single out when program is running on its first time
 	
@@ -43,7 +46,7 @@ int main()
 	{
 		system("cls");
 		display(num);
-		displaySelection(num, xCoord, yCoord, prevY, prevX, counter);
+		displaySelection(num, xCoord, yCoord, prevY, prevX, counter, backX, backY);
 		
 	
 		//do more stuff
@@ -63,7 +66,7 @@ return 0;
 
 
 
-void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter)
+void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, vector<int> &prevY, int &counter, vector<int> &backX, vector<int> &backY)
 {
 	// this function is huge and could probably be broken up more, but alas, I'm too lazy
 	
@@ -83,10 +86,10 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	
 	/*====== Keeping things inside the bounds ======*/
 	if((yCoord > 8) && (val==115)){yCoord=0;} //for S key
-	if((yCoord <= 1) && (val==119)){yCoord=10;} //for W key
+	if((yCoord <= 0) && (val==119)){yCoord=10;} //for W key
 	/*==============================================*/		
 	if((xCoord >= 8) && (val==100)){xCoord=-1;} // for D key
-	if((xCoord <=1) && (val==97)){xCoord=9;} // for A key
+	if((xCoord <=0) && (val==97)){xCoord=9;} // for A key
 	
 	/*Keys controlling the movement of current selection*/
 	
@@ -154,6 +157,12 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 		}
 	}
 	
+	/*===== BackSpace =====*/
+	if(val == 8)
+	{
+		backspacePressed(num, backX, backY, counter);
+	}
+
 	cout<<"X Value: "<<xCoord<<endl; //keep these here for now cause they're pretty
 	cout<<"Y Value: "<<yCoord<<endl;
 	
@@ -162,6 +171,8 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	prevX.push_back(xCoord); //add current Xcoord to end of vector
 	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
+	//if(counter!=0){prevX.erase(prevX.begin());prevY.erase(prevY.begin());}
+
 	if(counter!=0) //only run this after the first run as it will break otherwise
 	{
 		if(num[(prevY[counter-1])-1][prevX[counter-1]] == 'X') //if previous number is an X 
@@ -206,17 +217,11 @@ void enterSelection(char** num, int counter, vector<int> &prevX, vector<int> &pr
 	else if(val == 55){num[(prevY[counter-1])-1][prevX[counter-1]] = '7'; retVal = '7';}
 	else if(val == 56){num[(prevY[counter-1])-1][prevX[counter-1]] = '8'; retVal = '8';}
 	else if(val == 57){num[(prevY[counter-1])-1][prevX[counter-1]] = '9'; retVal = '9';}
-	
-	else if(val == 8)
-	{
-		backspacePressed(num);
-	}
-	
-	else{cout<<"Please enter aN valid key"<<endl; val = getch();}
+	else{cout<<"Please enter a valid key"<<endl; val = getch();}
 	
 	canThisWork = isValid(num, xCoord, yCoord, retVal); //call this bool function and assign the value to the variable
 	
-	if(canThisWork == false){ num[(prevY[counter-1])-1][prevX[counter-1]] = ' '; system("cls");}
+	if(canThisWork == false){ num[(prevY[counter-1])-1][prevX[counter-1]] = 'X'; system("cls");}
 }
 
 bool isValid (char** num, int &xCoord, int &yCoord, char val)
@@ -259,7 +264,7 @@ bool isValid (char** num, int &xCoord, int &yCoord, char val)
 	else {return false;}
 }
 
-void backspacePressed(char** num)
+void backspacePressed(char** num, vector<int> &backX, vector<int> &backY, int &counter)
 {
 	int x = 0;
 	int y = 1;
@@ -277,6 +282,18 @@ void backspacePressed(char** num)
 	}while(canThisWork == false);
 
 	num[y-1][x] = 'X';
+	
+	backX.push_back(x);
+	backY.push_back(y);
+
+	if(num[(backY[counter-1])-1][backX[counter-1]] == 'X') //if previous number is an X 
+		{
+			num[(backY[counter-1])-1][backX[counter-1]] = ' '; //'Make That Space Blank Again!' 
+		}
+}
+
+void clearExtras(char** num, int xCoord, int yCoord)
+{
 
 }
 
