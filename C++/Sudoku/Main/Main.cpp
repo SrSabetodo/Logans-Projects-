@@ -171,7 +171,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	prevX.push_back(xCoord); //add current Xcoord to end of vector
 	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
-	//if(counter!=0){prevX.erase(prevX.begin());prevY.erase(prevY.begin());}
+	if(counter!=0){prevX.erase(prevX.begin());prevY.erase(prevY.begin());}
 
 	if(counter!=0) //only run this after the first run as it will break otherwise
 	{
@@ -192,11 +192,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	{
 		cout<<"Please enter a valid key"<<endl;
 	}
-	
-	
-	
-	
-	
+
 	counter++; //increment the counter so it will only equal 0 once
 }
 
@@ -230,8 +226,10 @@ bool isValid (char** num, int &xCoord, int &yCoord, char val)
 	// will use nested for loops to check if there are any other numbers 
 	// will check all values of yCoord and xCoord to determine if there is exactly one of these numbers
 	
-	bool first = false;
-	bool second = false;
+	//val is the char that is returned when a key is pressed 
+
+	bool first = false; //sum of numbers that match val 
+	bool second = false; //sum of numbers that match val
 	
 	int actualY = xCoord;
 	int actualX = yCoord;
