@@ -171,7 +171,7 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	prevX.push_back(xCoord); //add current Xcoord to end of vector
 	prevY.push_back(yCoord); //add current Ycoord to end of vector
 	
-	if(counter!=0){prevX.erase(prevX.begin());prevY.erase(prevY.begin());}
+	//if(counter!=0){prevX.erase(prevX.begin());prevY.erase(prevY.begin());}
 
 	if(counter!=0) //only run this after the first run as it will break otherwise
 	{
