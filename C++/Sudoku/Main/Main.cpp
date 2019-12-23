@@ -188,7 +188,11 @@ void displaySelection(char **num, int &xCoord, int &yCoord, vector<int> &prevX, 
 	}
 	
 	
-	if( (val!=119) && (val!=97) && (val!=115) && (val!=100) && (val!=27) && (val!=49) && (val!=50) && (val!=51) && (val!=52) && (val!=53) && (val!=54) && (val!=55) && (val!=56) && (val!=57) && (val!=27) && (val!=8) && (val!=87) && (val!=65) && (val!=83) && (val!=68) )
+	if( (val!=119) && (val!=97) && (val!=115) && 
+	(val!=100) && (val!=27) && (val!=49) && (val!=50) && 
+	(val!=51) && (val!=52) && (val!=53) && (val!=54) && 
+	(val!=55) && (val!=56) && (val!=57) && (val!=27) && 
+	(val!=8) && (val!=87) && (val!=65) && (val!=83) && (val!=68) )
 	{
 		cout<<"Please enter a valid key"<<endl;
 	}

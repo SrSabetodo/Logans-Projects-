@@ -13,16 +13,16 @@ int main()
    while(true)
    {
     int p;
-    p = rand() % 173 + 1;
+    p = rand() % 100 + 1;
    
     int z; 
-    z = rand() % 173 + 1;
+    z = rand() % 100 + 1;
 
     do
     {
         if(z<p)
         {
-        z = rand() % 173 + 1;
+        z = rand() % 100 + 1;
         }
     }
     while(p>z);
@@ -32,22 +32,25 @@ int main()
     {
         for(int i = 0;i<p;i++)
         {
-            cout<<"_";
+            int v = rand() % 9 +1;
+
+            if(v%2==0){cout<<"_";}
+            else{cout<<"|";}
          }
         if(p!=172){cout<<endl;}
         p++;
     }
 /*=============================================*/
    int x; //same as p
-    x = rand() % 173 + 1;
+    x = rand() % 100 + 1;
    int c; //same as z
-    c = rand() % 173 + 1;
+    c = rand() % 100 + 1;
 
     do
     {
         if(c>x)
         {
-            c = rand() % 173 + 1;
+            c = rand() % 100 + 1;
         }
     }
     while(c>x);
@@ -57,7 +60,10 @@ int main()
 
         for(int i = 0; i<x; i++)
         {     
-            cout<<"_";
+           int v = rand() % 9 +1;
+
+            if(v%2==0){cout<<"_";}
+            else{cout<<"|";}
         }
          cout<<endl;
          x--;
