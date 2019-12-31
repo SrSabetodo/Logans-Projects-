@@ -10,17 +10,10 @@
         char lineThreeOne = ' ', lineThreeTwo = ' ', lineThreeThree = ' ';
         
         boolean endGame = false;
-        boolean one = false, two = false, three = false;
-
-        int userChoice; 
 
         do
         {
-        /*throw InterruptedException;
-        {
-         Thread.sleep(2000);
-        };*/
-
+ 
         boolean compSave = false;
 
         display(lineOneOne, lineOneTwo, lineOneThree, lineTwoOne, lineTwoTwo, lineTwoThree, lineThreeOne, lineThreeTwo, lineThreeThree);
@@ -33,39 +26,30 @@
         {
             case 1:
             if(lineOneOne == ' '){lineOneOne = 'X';}
-            userChoice = 1;
             break;
             case 2:
             if(lineOneTwo == ' '){lineOneTwo = 'X';}
-            userChoice = 2;
             break;
             case 3:
             if(lineOneThree == ' '){lineOneThree = 'X';}
-            userChoice = 3;
             break;
             case 4:
             if(lineTwoOne == ' '){lineTwoOne = 'X';}
-            userChoice = 4;
             break;
             case 5:
             if(lineTwoTwo == ' '){lineTwoTwo = 'X';}
-            userChoice = 5;
             break;
             case 6:
             if(lineTwoThree == ' '){lineTwoThree = 'X';}
-            userChoice = 6;
             break;
             case 7:
             if(lineThreeOne == ' '){lineThreeOne = 'X';}
-            userChoice = 7;
             break;
             case 8:
             if(lineThreeTwo == ' '){lineThreeTwo = 'X';}
-            userChoice = 8;
             break;
             case 9:
             if(lineThreeThree == ' '){lineThreeThree = 'X';}
-            userChoice = 9;
             break;
             default:
             System.out.print("Please enter a valid choice: ");
@@ -113,60 +97,61 @@ if(lineOneThree == 'X' && lineTwoTwo == 'X' && lineThreeOne == ' '){lineThreeOne
 if(lineOneThree == ' ' && lineTwoTwo == 'X' && lineThreeOne == 'X'){lineOneThree = 'O'; compSave = true;}
 if(lineOneThree == 'X' && lineTwoTwo == ' ' && lineThreeOne == 'X'){lineTwoTwo = 'O'; compSave = true;}
 
-if(!compSave)
+if(compSave!=true)
 {
-    int compSelection = compSelection();
+    boolean notWork = false;
    do
    {
-    boolean error = false;
+    int compSelection = compSelection();
+    notWork = false;
     switch(compSelection)
     {
         case 1:
         if(lineOneOne == ' '){lineOneOne = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
         
         case 2:
         if(lineOneTwo == ' '){lineOneTwo = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 3:
         if(lineOneThree == ' '){lineOneThree = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 4:
         if(lineTwoOne == ' '){lineTwoOne = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 5:
         if(lineTwoTwo == ' '){lineTwoTwo = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 6:
         if(lineTwoThree == ' '){lineTwoThree = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 7:
         if(lineThreeOne == ' '){lineThreeOne = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 8:
         if(lineThreeTwo == ' '){lineThreeTwo = 'O';}
-        else{error = true;}
+        else{notWork = true;}
         break;
 
         case 9: 
         if(lineThreeThree == ' '){lineThreeThree = 'O';}
-        else{error = true;}
+        else{notWork = true;}
      }
     }
-    while(!true);
+    while(notWork == true);
 
 }
 /*===== Validate Game =====*/
@@ -193,13 +178,15 @@ if(!compSave)
     if(lineOneOne == 'X' && lineTwoTwo == 'X' && lineThreeThree == 'X'){endGame = true;} // \ diag
     if(lineOneThree == 'X' && lineTwoTwo == 'X' && lineThreeOne == 'X'){endGame = true;} // / diag
    
-    if(endGame){display(lineOneOne, lineOneTwo, lineOneThree, lineTwoOne, lineTwoTwo, lineTwoThree, lineThreeOne, lineThreeTwo, lineThreeThree);}
-   
+    if(lineOneOne != ' ' && lineOneTwo != ' ' && lineOneThree != ' ' && lineTwoOne != ' ' && lineTwoTwo != ' ' && lineTwoThree != ' ' && lineThreeOne != ' ' && lineThreeTwo != ' ' && lineThreeThree != ' ')
+    {
+        endGame = true;
     }
-    while(!endGame);
 
+    if(endGame == true){display(lineOneOne, lineOneTwo, lineOneThree, lineTwoOne, lineTwoTwo, lineTwoThree, lineThreeOne, lineThreeTwo, lineThreeThree);}
 
-
+    }
+    while(endGame!=true);
     }
     
     public static void display(char lineOneOne, char lineOneTwo, char lineOneThree, char lineTwoOne, char lineTwoTwo, char lineTwoThree,
