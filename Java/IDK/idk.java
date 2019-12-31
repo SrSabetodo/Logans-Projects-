@@ -21,47 +21,58 @@
             boolean compTryToWin = false;
             boolean sneakyComp = false;
             
+            boolean spaceFull = false;
 
             display(lineOneOne, lineOneTwo, lineOneThree, lineTwoOne, lineTwoTwo, lineTwoThree, lineThreeOne, lineThreeTwo, lineThreeThree);
             
             /*===== Get user selection =====*/
-
-        
-            int selection = getSelection();
-
-            switch(selection)
+            do
             {
-                case 1:
-                if(lineOneOne == ' '){lineOneOne = 'X';}
-                break;
-                case 2:
-                if(lineOneTwo == ' '){lineOneTwo = 'X';}
-                break;
-                case 3:
-                if(lineOneThree == ' '){lineOneThree = 'X';}
-                break;
-                case 4:
-                if(lineTwoOne == ' '){lineTwoOne = 'X';}
-                break;
-                case 5:
-                if(lineTwoTwo == ' '){lineTwoTwo = 'X';}
-                break;
-                case 6:
-                if(lineTwoThree == ' '){lineTwoThree = 'X';}
-                break;
-                case 7:
-                if(lineThreeOne == ' '){lineThreeOne = 'X';}
-                break;
-                case 8:
-                if(lineThreeTwo == ' '){lineThreeTwo = 'X';}
-                break;
-                case 9:
-                if(lineThreeThree == ' '){lineThreeThree = 'X';}
-                break;
-                default:
-                System.out.print("Please enter a valid choice: ");
-            }
-            
+                int selection = getSelection();
+
+                switch(selection)
+                {
+                    case 1:
+                    if(lineOneOne == ' '){lineOneOne = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 2:
+                    if(lineOneTwo == ' '){lineOneTwo = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 3:
+                    if(lineOneThree == ' '){lineOneThree = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 4:
+                    if(lineTwoOne == ' '){lineTwoOne = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 5:
+                    if(lineTwoTwo == ' '){lineTwoTwo = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 6:
+                    if(lineTwoThree == ' '){lineTwoThree = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 7:
+                    if(lineThreeOne == ' '){lineThreeOne = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 8:
+                    if(lineThreeTwo == ' '){lineThreeTwo = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    case 9:
+                    if(lineThreeThree == ' '){lineThreeThree = 'X'; spaceFull = false;}
+                    else{spaceFull = true;}
+                    break;
+                    default:
+                    System.out.print("Please enter a valid choice: ");
+                }
+            }while(spaceFull==true);
+
             /*===== Make sure the board isn't full =====*/
 
             if(lineOneOne != ' ' && lineOneTwo != ' ' && lineOneThree != ' ' && lineTwoOne != ' ' && lineTwoTwo != ' ' && lineTwoThree != ' ' && lineThreeOne != ' ' && lineThreeTwo != ' ' && lineThreeThree != ' ')
