@@ -561,6 +561,7 @@ class idk {
         }while(response == 'y');
 
         System.out.println("Thanks for playing!");
+        in.close();
     }
 
     public static void display(char lineOneOne, char lineOneTwo, char lineOneThree, char lineTwoOne, char lineTwoTwo,
