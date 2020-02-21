@@ -566,8 +566,8 @@ class idk {
 
     public static void display(char lineOneOne, char lineOneTwo, char lineOneThree, char lineTwoOne, char lineTwoTwo,
             char lineTwoThree, char lineThreeOne, char lineThreeTwo, char lineThreeThree) {
-        System.out.println(lineOneOne + "|" + lineOneTwo + "|" + lineOneThree + "   " + "1|2|3");
-        System.out.println(lineTwoOne + "|" + lineTwoTwo + "|" + lineTwoThree + "   " + "4|5|6");
+        System.out.println(lineOneOne + "|" + lineOneTwo + "|" + lineOneThree + "   " +       "1|2|3");
+        System.out.println(lineTwoOne + "|" + lineTwoTwo + "|" + lineTwoThree + "   " +       "4|5|6");
         System.out.println(lineThreeOne + "|" + lineThreeTwo + "|" + lineThreeThree + "   " + "7|8|9");
     }
 
