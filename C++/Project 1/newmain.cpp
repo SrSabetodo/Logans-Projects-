@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <time.h>
 
-int ***read_ppm(int width, int height, int ***image);
+int ***read_ppm(int width, int height, int*** image);
 int random_color();
 int **first_guess(int k, int **means_list);
 void get_widthAndheight(int &width, int &height);
@@ -15,11 +15,13 @@ int main()
 {
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 7; // num colors, k set to 7 for example
-
+    int k = 7; // num colors, k set to 7 for example 
+    
     int width, height; // Declare width and height variables so can can pass by reference
-
-    get_widthAndheight(width, height); // Get width and height returned by reference
+    
+    get_widthAndheight(width, height); // Get width and height returned by reference 
+    
+    cout<<"got to this"<<endl;
 
     int **means_list = new int *[k];
     for (int i = 0; i < k; i++)
@@ -27,21 +29,33 @@ int main()
         means_list[i] = new int[3]; //create the dynamic 2D array means_list
     }
 
+    cout<<"Got to here mate"<<endl;
+    cout<<"Now got here matealihfskoudjghfkaudhfksjdh'vbg"<<endl;
+
     int ***image = new int **[width];
 
-    for (int i = 0; i < width; i++)
-    {
-        image[i] = new int *[height];
-
-        for (int j = 0; j < height; j++)
+        for (int i = 0; i < width; i++)
         {
-            image[i][j] = new int[3];
-        }
-    }
+            image[i] = new int *[height];
 
+            for (int j = 0; j < height; j++)
+            {
+                image[i][j] = new int[3];
+            }
+        }
+
+   
     image = read_ppm(width, height, image); // get image data
 
     means_list = first_guess(k, means_list); // populate means list with random colors
+
+    for(int i = 0; i < k; i++)
+    {
+        for(int j = 0; j < 3; j++)
+        {
+            cout<<means_list[i][j]<<" ";
+        }
+    }
 
     /* ===== Deallocating image ===== */
     for (int i = 0; i < width; i++)
@@ -64,7 +78,7 @@ int main()
     return 0;
 }
 
-int ***read_ppm(int width, int height, int ***image)
+int ***read_ppm(int width, int height, int*** image)
 {
     ifstream myFile; // declare ifstream object
 
@@ -100,7 +114,7 @@ int ***read_ppm(int width, int height, int ***image)
         image_dat[i] = stoi(temp); // cast temp to int and add to array
     }
 
-    if (list[0] != "P3") // make sure the ppm file is a P3 ppm
+     if (list[0] != "P3") // make sure the ppm file is a P3 ppm
     {
         cout << "Error! This file is not of the right ppm format!" << endl;
         typeFlag = true; // if it isn't a P3 ppm, set this flag to true
@@ -127,13 +141,13 @@ int ***read_ppm(int width, int height, int ***image)
                 looper += 3; // add 3 to the looper since we added 3 elements to the array
             }
         }
-        return image; // Return array so we can have it in main
+    return image; // Return array so we can have it in main
     }
 }
 
 void get_widthAndheight(int &width, int &height)
 {
-    ifstream myFile;                                             // declare ifstream object
+    ifstream myFile; // declare ifstream object
     myFile.open("Peik_Hall_University_of_Minnesota_5-tiny.ppm"); //open file
     string reader;
 
@@ -147,16 +161,16 @@ void get_widthAndheight(int &width, int &height)
         while (counter < 4) // read from file into string, reader
         {
             myFile >> reader;
-
-            if (counter == 1)
+            
+            if(counter == 1)
             {
                 type = reader;
             }
-            if (counter == 2)
+            if(counter == 2)
             {
                 width1 = reader;
             }
-            if (counter == 3)
+            if(counter == 3)
             {
                 height1 = reader;
             }
