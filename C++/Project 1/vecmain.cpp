@@ -4,6 +4,7 @@
 #include <string>
 #include <cstdlib>
 #include <time.h>
+#include <cmath>
 
 using namespace std;
 
@@ -16,29 +17,54 @@ void read_ppm(vector<vector<Pixel>> &image, int width, int height);
 int random_color();
 void first_guess(int k, vector<Pixel> &means_list);
 void get_widthAndheight(int &width, int &height);
+void average(vector<Pixel> &vect, int &red, int &blu, int &grn);
+float get_distance(vector<Pixel> c1, vector<Pixel> c2);
+void update_assignments(const vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, const vector<Pixel> &means_list);
+void update_means(const vector<vector<Pixel>> &image, const vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list, const int k);
+void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list); 
+void save_ppm(string filename, vector<vector<Pixel>> &image, const int width, const int height);
 
 // TODO
-// Start writing code for average functions
-// Average function will accept a vector
+// Write and implement means and assignments list functions
 
 int main()
 {
 
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 3; // num colors, k set to 7 for example
-    int width, height; // Declare width and height variables so can can pass by reference
-
+    int k = 7;                     // num colors, k set to 7 for example
+    int width, height;             // Declare width and height variables so can can pass by reference
+    cout<<"Got here 1!"<<endl;
     get_widthAndheight(width, height); // Get width and height returned by reference
-
+     cout<<"Got here 2!"<<endl;
     vector<vector<Pixel>> image(width, vector<Pixel>(height)); // create a width X height vector of RGB objects
-
+     cout<<"Got here 3!"<<endl;
     read_ppm(image, width, height); // get image data
-
+     cout<<"Got here 4!"<<endl;
     vector<Pixel> means_list(k); // create a k long vector of RGB objects
-
+     cout<<"Got here 5!"<<endl;
     first_guess(k, means_list); // Populate list with random colors first
+     cout<<"Got here 6!"<<endl;
+    vector<vector<int>> assignments(width, vector<int>(height)); // create assignment list
+     cout<<"Got here 7!"<<endl;
+    vector<vector<int>> old_assignments(width, vector<int>(height));
+    do
+    {
+        old_assignments = assignments;
+         cout<<"Got here 9!"<<endl;
+        update_means(image, assignments, width, height, means_list, k);
+        cout<<"Got here 9.1"<<endl;
+        update_assignments(image, assignments, width, height, means_list);
+        cout<<"Got here 9.2!"<<endl;
+    } while(old_assignments != assignments);
 
+     cout<<"Got here 10!"<<endl;
+    label(image, assignments, width, height, means_list);
+     cout<<"Got here 11!"<<endl;
+    string filename = "please_work.ppm";
+     cout<<"Got here 12!"<<endl;
+    save_ppm(filename, image, width, height);
+     cout<<"Got here 13"<<endl;
     return 0; // return 0
 }
 
@@ -157,4 +183,146 @@ void first_guess(int k, vector<Pixel> &means_list)
         means_list[i].g = random_color();
         means_list[i].b = random_color();
     }
+}
+
+void average(vector<Pixel> &vect, int &red, int &blu, int &grn)
+{
+    // be sure to return random color if length of assignment list is zero
+    red = 0;
+    blu = 0;
+    grn = 0;
+
+    for (int i = 0; i < vect.size(); i++)
+    {
+        red += vect[i].r;
+        blu += vect[i].b;
+        grn += vect[i].g;
+    }
+
+    int num_colors = vect.size();
+
+    red = red / num_colors;
+    blu = blu / num_colors;
+    grn = grn / num_colors;
+
+    cout<<"red: "<<red<<endl;
+    cout<<"blu: "<<blu<<endl;
+    cout<<"grn: "<<grn<<endl;
+}
+
+float get_distance(vector<Pixel> c1, vector<Pixel> c2)
+{
+    int c1r = c1[0].r;
+    int c1g = c1[0].g;
+    int c1b = c1[0].b;
+
+    int c2r = c2[0].r;
+    int c2g = c2[0].g;
+    int c2b = c2[0].b;
+
+    return sqrt(((c1r - c2r) * (c1r - c2r)) + ((c1g - c2g) * (c1g - c2g)) + ((c1b - c2b) * (c1b - c2b)));
+}
+
+void update_assignments(const vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, const vector<Pixel> &means_list)
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            float distances[means_list.size()];
+            vector<Pixel> c1(1);
+            c1[0].r = image[j][i].r;
+            c1[0].g = image[j][i].g;
+            c1[0].b = image[j][i].b;
+
+            for (int k = 0; k < means_list.size(); k++)
+            {
+                vector<Pixel> c2(1);
+                c2[0].r = means_list[k].r;
+                c2[0].g = means_list[k].g;
+                c2[0].b = means_list[k].b;
+
+                distances[k] = get_distance(c1, c2);
+            }
+
+            int smallest = 0;
+
+            for (int n = 0; n < means_list.size(); n++)
+            {
+                if (distances[n] < distances[smallest])
+                {
+                    smallest = n;
+                }
+            }
+
+            assignments[j][i] = smallest;
+        }
+    }
+}
+
+void update_means(const vector<vector<Pixel>> &image, const vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list, const int k)
+{
+    for(int i = 0; i < k ; i++)
+    {
+        vector<Pixel> average_list;
+        cout<<"Got here 10.1"<<endl;
+        for (int n = 0; n < height; n++)
+        {
+            for (int j = 0; j < width; j++)
+            {
+                if(assignments[j][n] == i )
+                {
+                    cout<<"Got here 10.2"<<endl;
+                    vector<Pixel> appender(1);
+                    appender[0].r = image[j][n].r;
+                    appender[0].g = image[j][n].g;
+                    appender[0].b = image[j][n].b;
+                    cout<<"Got here 10.3"<<endl;
+                    average_list.push_back(appender[0]);
+                }
+            }
+        }
+        cout<<"Got here 10.4"<<endl;
+        int red = 0, blu = 0, grn = 0;
+        cout<<"Got here 10.5"<<endl;
+        average(average_list, red, blu, grn);
+        cout<<"Got here 10.55"<<endl;
+        means_list[i].r = red;
+        means_list[i].g = grn;
+        means_list[i].b = blu;
+        cout<<"Got here 10.6"<<endl;
+    }
+
+}
+
+void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list)
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            int index = assignments[j][i];
+            image[j][i] = means_list[index];
+        }
+    }
+}
+
+void save_ppm(string filename, vector<vector<Pixel>> &image, const int width, const int height)
+{
+    ofstream outFile;
+    outFile.open(filename);
+
+    outFile << "P3\n";
+    outFile << width<<" "<<height<<endl;
+    outFile << "255\n"; 
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            outFile << image[j][i].r << " " <<  image[j][i].g << " "<<  image[j][i].b << " ";
+        }
+    }
+
+    outFile.close();
 }
