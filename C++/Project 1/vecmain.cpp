@@ -13,16 +13,16 @@ struct Pixel
     int r, g, b;
 };
 
-void read_ppm(vector<vector<Pixel>> &image, int width, int height);
+void read_ppm(vector<vector<Pixel>> &image, int width, int height, const string openFile);
 int random_color();
 void first_guess(int k, vector<Pixel> &means_list);
-void get_widthAndheight(int &width, int &height);
+void get_widthAndheight(int &width, int &height, const string openFile);
 void average(vector<Pixel> &vect, int &red, int &blu, int &grn);
 float get_distance(vector<Pixel> c1, vector<Pixel> c2);
 void update_assignments(const vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, const vector<Pixel> &means_list);
 void update_means(const vector<vector<Pixel>> &image, const vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list, const int k);
-void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list); 
-void save_ppm(string filename, vector<vector<Pixel>> &image, const int width, const int height);
+void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list);
+void save_ppm(const string filename, vector<vector<Pixel>> &image, const int width, const int height);
 
 // TODO
 // Write and implement means and assignments list functions
@@ -32,50 +32,56 @@ int main()
 
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 7;                     // num colors, k set to 7 for example
-    int width, height;             // Declare width and height variables so can can pass by reference
-    cout<<"Got here 1!"<<endl;
-    get_widthAndheight(width, height); // Get width and height returned by reference
-     cout<<"Got here 2!"<<endl;
+    int k = 4;         // num colors, k set to 7 for example
+    int width, height; // Declare width and height variables so can can pass by reference
+    string openFile = "Southeast_Steam_Plant-University_of_Minnesota-large.ppm";
+
+    get_widthAndheight(width, height, openFile); // Get width and height returned by reference
+
     vector<vector<Pixel>> image(width, vector<Pixel>(height)); // create a width X height vector of RGB objects
-     cout<<"Got here 3!"<<endl;
-    read_ppm(image, width, height); // get image data
-     cout<<"Got here 4!"<<endl;
+    
+    read_ppm(image, width, height, openFile); // get image data
+   
     vector<Pixel> means_list(k); // create a k long vector of RGB objects
-     cout<<"Got here 5!"<<endl;
+
     first_guess(k, means_list); // Populate list with random colors first
-     cout<<"Got here 6!"<<endl;
+    for (int i = 0; i < k; i++)
+    {
+        cout << "Means_List: " << means_list[i].r << " " << means_list[i].g << " " << means_list[i].b << endl;
+    }
     vector<vector<int>> assignments(width, vector<int>(height)); // create assignment list
-     cout<<"Got here 7!"<<endl;
+
     vector<vector<int>> old_assignments(width, vector<int>(height));
     do
     {
         old_assignments = assignments;
-         cout<<"Got here 9!"<<endl;
-        update_means(image, assignments, width, height, means_list, k);
-        cout<<"Got here 9.1"<<endl;
-        update_assignments(image, assignments, width, height, means_list);
-        cout<<"Got here 9.2!"<<endl;
-    } while(old_assignments != assignments);
 
-     cout<<"Got here 10!"<<endl;
+        update_assignments(image, assignments, width, height, means_list);
+        update_means(image, assignments, width, height, means_list, k);
+        
+        cout<<endl;
+        for (int i = 0; i < k; i++)
+        {
+            cout << "Means_List after update: " << means_list[i].r << " " << means_list[i].g << " " << means_list[i].b << endl;
+        }
+    } while (old_assignments != assignments);
+    
     label(image, assignments, width, height, means_list);
-     cout<<"Got here 11!"<<endl;
+   
     string filename = "please_work.ppm";
-     cout<<"Got here 12!"<<endl;
+
     save_ppm(filename, image, width, height);
-     cout<<"Got here 13"<<endl;
+
+    cout << "This file did finish!" << endl;
     return 0; // return 0
 }
 
-void read_ppm(vector<vector<Pixel>> &image, int width, int height)
+void read_ppm(vector<vector<Pixel>> &image, int width, int height, const string openFile)
 {
-    ifstream myFile; // declare ifstream object
-
-    myFile.open("Peik_Hall_University_of_Minnesota_5-tiny.ppm"); //open file
-
-    string reader;       // declare function to read strings from file into
-    vector<string> list; // declare vector to hold file
+    ifstream myFile;                                              // declare ifstream object
+    myFile.open(openFile); //open file
+    string reader;                                                // declare function to read strings from file into
+    vector<string> list;                                          // declare vector to hold file
 
     bool typeFlag = false;             // bool to ensure ppm file is the correct format
     bool colorReprensentation = false; // bool to make sure colors are ints from 0 to 255
@@ -92,11 +98,11 @@ void read_ppm(vector<vector<Pixel>> &image, int width, int height)
     {
         cout << "Error opening file!" << endl;
     }
-
     int size = height * width; // the size of the image_dat array is equal to height times width
     size *= 3;                 // times three since every pixel has 3 elements
 
-    int image_dat[size]; // make a array of size... size
+    vector<int> image_dat(size);
+    // int image_dat[size]; // make a array of size... size
 
     for (int i = 0; i < size; i++) // loop through image_dat array
     {
@@ -134,11 +140,11 @@ void read_ppm(vector<vector<Pixel>> &image, int width, int height)
     }
 }
 
-void get_widthAndheight(int &width, int &height)
+void get_widthAndheight(int &width, int &height, const string openFile)
 {
-    ifstream myFile;                                             // declare ifstream object
-    myFile.open("Peik_Hall_University_of_Minnesota_5-tiny.ppm"); //open file
-    string reader;                                               // declare string to read into
+    ifstream myFile;                                              // declare ifstream object
+    myFile.open(openFile); //open file
+    string reader;                                                // declare string to read into
 
     string type;    // string to check variable type
     string height1; // string for height
@@ -200,14 +206,18 @@ void average(vector<Pixel> &vect, int &red, int &blu, int &grn)
     }
 
     int num_colors = vect.size();
-
-    red = red / num_colors;
-    blu = blu / num_colors;
-    grn = grn / num_colors;
-
-    cout<<"red: "<<red<<endl;
-    cout<<"blu: "<<blu<<endl;
-    cout<<"grn: "<<grn<<endl;
+    if (vect.size() == 0)
+    {
+        red = random_color();
+        grn = random_color();
+        blu = random_color();
+    }
+    else
+    {
+        red = red / num_colors;
+        blu = blu / num_colors;
+        grn = grn / num_colors;
+    }
 }
 
 float get_distance(vector<Pixel> c1, vector<Pixel> c2)
@@ -241,7 +251,7 @@ void update_assignments(const vector<vector<Pixel>> &image, vector<vector<int>> 
                 c2[0].r = means_list[k].r;
                 c2[0].g = means_list[k].g;
                 c2[0].b = means_list[k].b;
-
+                
                 distances[k] = get_distance(c1, c2);
             }
 
@@ -262,37 +272,34 @@ void update_assignments(const vector<vector<Pixel>> &image, vector<vector<int>> 
 
 void update_means(const vector<vector<Pixel>> &image, const vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list, const int k)
 {
-    for(int i = 0; i < k ; i++)
+    vector<Pixel> average_list;
+    vector<Pixel> appender(1);
+
+    for (int i = 0; i < k; i++)
     {
-        vector<Pixel> average_list;
-        cout<<"Got here 10.1"<<endl;
+
         for (int n = 0; n < height; n++)
         {
             for (int j = 0; j < width; j++)
             {
-                if(assignments[j][n] == i )
+                if (assignments[j][n] == i)
                 {
-                    cout<<"Got here 10.2"<<endl;
-                    vector<Pixel> appender(1);
                     appender[0].r = image[j][n].r;
                     appender[0].g = image[j][n].g;
                     appender[0].b = image[j][n].b;
-                    cout<<"Got here 10.3"<<endl;
                     average_list.push_back(appender[0]);
                 }
             }
         }
-        cout<<"Got here 10.4"<<endl;
         int red = 0, blu = 0, grn = 0;
-        cout<<"Got here 10.5"<<endl;
+       
         average(average_list, red, blu, grn);
-        cout<<"Got here 10.55"<<endl;
+        
         means_list[i].r = red;
         means_list[i].g = grn;
         means_list[i].b = blu;
-        cout<<"Got here 10.6"<<endl;
-    }
 
+    }
 }
 
 void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const int width, const int height, vector<Pixel> &means_list)
@@ -307,20 +314,20 @@ void label(vector<vector<Pixel>> &image, vector<vector<int>> &assignments, const
     }
 }
 
-void save_ppm(string filename, vector<vector<Pixel>> &image, const int width, const int height)
+void save_ppm(const string filename, vector<vector<Pixel>> &image, const int width, const int height)
 {
     ofstream outFile;
     outFile.open(filename);
 
     outFile << "P3\n";
-    outFile << width<<" "<<height<<endl;
-    outFile << "255\n"; 
+    outFile << width << " " << height << endl;
+    outFile << "255\n";
 
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            outFile << image[j][i].r << " " <<  image[j][i].g << " "<<  image[j][i].b << " ";
+            outFile << image[j][i].r << " " << image[j][i].g << " " << image[j][i].b << " ";
         }
     }
 
