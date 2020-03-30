@@ -30,7 +30,7 @@ int main()
 
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 7;         // num colors, k set to 7 for example
+    int k = 5;         // num colors, k set to 7 for example
     int width, height; // Declare width and height variables so can can pass by reference
     std::string openFile = "Southeast_Steam_Plant-University_of_Minnesota-large.ppm";
 
