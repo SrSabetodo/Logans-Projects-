@@ -31,8 +31,10 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray);
 void deleteMove(char **array, int *xCoord, int *yCoord, int value, char **controlArray);
 void deleteModeFindOpenSpaceAorD(char **controlArray, int *xCoord, int *yCoord);
 void deleteModeFindOpenSpaceWorS(char **controlArray, int *xCoord, int *yCoord);
-void cleanUpArray(char **array);
+void cleanUpDisplayArray(char **array);
 void locateSelection(char **array);
+void deleteBackSpacePressed(char **controlArray, char **array, int *xCoord, int *yCoord, char previousKey);
+void deleteBackSlashPressed(char **controlArray, char **array, int *xCoord, int *yCoord, char previousKey);
 
 int main(void)
 {
@@ -58,7 +60,7 @@ int main(void)
     int val, numberEmptySpaces = findNumEmptySpaces(array);
 
     /* ===== Welcome screen displays first, then the puzzle loop starts ===== */
-    // welcomeScreen(array); // set this back when not testing...
+    welcomeScreen(array);
 
     while (1)
     {
@@ -166,10 +168,10 @@ void deallocateStuff(char **array)
 
 char **allocateArray()
 {
-    char **array = malloc(sizeof(char *[9]));
+    char **array = (char**)malloc(sizeof(char *[9]));
     for (int i = 0; i < 9; i++)
     {
-        array[i] = malloc(sizeof(char[9]));
+        array[i] = (char*)malloc(sizeof(char[9]));
     }
 
     for (int i = 0; i < 9; i++)
@@ -421,7 +423,7 @@ char **readFromFile(char **array)
     char c;
 
     FILE *file;
-    file = fopen("test.txt", "r");
+    file = fopen("numbers.txt", "r");
 
     int counter = 0;
 
@@ -936,7 +938,7 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
             array[*yCoord][*xCoord] = 'X';
             array[old_YCoord][old_XCoord] = previousKey;
 
-            cleanUpArray(array);
+            cleanUpDisplayArray(array);
             puts("Erase mode deactivated");
 
             sleep_seconds(500);
@@ -958,6 +960,20 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
         else if (val == 13)
         {
             previousKey = ' ';
+        }
+        else if (val == 8)
+        {
+            deleteBackSpacePressed(controlArray, array, *&xCoord, *&yCoord, previousKey);
+
+            old_XCoord = *xCoord;
+            old_YCoord = *yCoord;
+        }
+        else if (val == 92)
+        {
+            deleteBackSlashPressed(controlArray, array, *&xCoord, *&yCoord, previousKey);
+
+            old_XCoord = *xCoord;
+            old_YCoord = *yCoord;
         }
     }
 }
@@ -1138,7 +1154,7 @@ void deleteModeFindOpenSpaceWorS(char **controlArray, int *xCoord, int *yCoord)
     }
 }
 
-void cleanUpArray(char **array)
+void cleanUpDisplayArray(char **array)
 {
     for (int y = 0; y < 9; y++)
     {
@@ -1212,4 +1228,100 @@ void locateSelection(char **array)
     printf("      %c | %c | %c || %c | %c | %c || %c | %c | %c  \n", copyArray[8][0], copyArray[8][1], copyArray[8][2], copyArray[8][3], copyArray[8][4], copyArray[8][5], copyArray[8][6], copyArray[8][7], copyArray[8][8]);
 
     sleep_seconds(500);
+}
+
+void deleteBackSpacePressed(char **controlArray, char **array, int *xCoord, int *yCoord, char previousKey)
+{
+    int old_xCoord = *xCoord;
+    int old_yCoord = *yCoord;
+
+    int x = *xCoord;
+    int y = *yCoord;
+
+    int counter = 0;
+
+    while (1)
+    {
+        if (controlArray[y][x] == '1' && array[y][x] != 'X')
+        {
+            *xCoord = x;
+            *yCoord = y;
+
+            array[*yCoord][*xCoord] = 'X';
+            array[old_yCoord][old_xCoord] = previousKey;
+
+            return;
+        }
+        else
+        {
+            counter += 1;
+
+            x += 1;
+
+            if (x > 8)
+            {
+                x = 0;
+                y += 1;
+            }
+
+            if (y > 8)
+            {
+                y = 0;
+                x = 0;
+            }
+
+            if (counter > 81)
+            {
+                return;
+            }
+        }
+    }
+}
+
+void deleteBackSlashPressed(char **controlArray, char **array, int *xCoord, int *yCoord, char previousKey)
+{
+    int old_xCoord = *xCoord;
+    int old_yCoord = *yCoord;
+
+    int x = *xCoord;
+    int y = *yCoord;
+
+    int counter = 0;
+
+    while (1)
+    {
+        if (controlArray[y][x] == '1' && array[y][x] != 'X')
+        {
+            *xCoord = x;
+            *yCoord = y;
+
+            array[*yCoord][*xCoord] = 'X';
+            array[old_yCoord][old_xCoord] = previousKey;
+
+            return;
+        }
+        else
+        {
+            counter -= 1;
+
+            x -= 1;
+
+            if (x < 0)
+            {
+                x = 8;
+                y -= 1;
+            }
+
+            if (y < 0)
+            {
+                y = 8;
+                x = 8;
+            }
+
+            if (counter > 81)
+            {
+                return;
+            }
+        }
+    }
 }
