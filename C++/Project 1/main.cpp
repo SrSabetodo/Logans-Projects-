@@ -6,15 +6,15 @@
 #include <time.h>
 #include <cmath>
 
-void ***read_ppm(int width, int height, int ***image);
+void read_ppm(int width, int height, int ***image);
 int random_color();
 int **first_guess(int k, int **means_list);
 void get_widthAndheight(int &width, int &height);
 float get_distance(int c1[3], int c2[3]);
-void ***update_assignments(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k);
-void ***update_means(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k, const int MAX_SIZE);
-void ***label(int ***image, int ***assignments_list, int **means_list, const int width, const int height);
-void ***save_ppm(const std::string &filename, int ***image, const int width, const int height);
+void update_assignments(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k);
+void update_means(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k, const int MAX_SIZE);
+void label(int ***image, int ***assignments_list, int **means_list, const int width, const int height);
+void save_ppm(const std::string &filename, int ***image, const int width, const int height);
 
 int main()
 {
@@ -148,7 +148,7 @@ int main()
     return 0;
 }
 
-void ***read_ppm(const int width, const int height, int ***image)
+void read_ppm(const int width, const int height, int ***image)
 {
     std::ifstream myFile; // declare ifstream object
 
@@ -270,7 +270,7 @@ int **first_guess(int k, int **means_list)
     return means_list;
 }
 
-void *average(short int average_list[][3], int &red, int &grn, int &blu)
+void average(short int average_list[][3], int &red, int &grn, int &blu)
 {
     red = 0;
     blu = 0;
@@ -306,7 +306,7 @@ float get_distance(int c1[3], int c2[3])
     return sqrt(((c1[0] - c2[0]) * (c1[0] - c2[0])) + ((c1[1] - c2[1]) * (c1[1] - c2[1])) + ((c1[2] - c2[2]) * (c1[2] - c2[2])));
 }
 
-void ***update_assignments(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k)
+void update_assignments(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k)
 {
     for (int i = 0; i < height; i++)
     {
@@ -346,7 +346,7 @@ void ***update_assignments(int ***image, int ***assignments_list, const int widt
     }
 }
 
-void ***update_means(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k, const int MAX_SIZE)
+void update_means(int ***image, int ***assignments_list, const int width, const int height, int **means_list, const int k, const int MAX_SIZE)
 {
     short int average_list[MAX_SIZE][3];
     int counter = 0;
@@ -384,7 +384,7 @@ void ***update_means(int ***image, int ***assignments_list, const int width, con
     }
 }
 
-void ***label(int ***image, int ***assignments_list, int **means_list, const int width, const int height)
+void label(int ***image, int ***assignments_list, int **means_list, const int width, const int height)
 {
     for (int i = 0; i < height; i++)
     {
@@ -407,7 +407,7 @@ void ***label(int ***image, int ***assignments_list, int **means_list, const int
     }
 }
 
-void ***save_ppm(const std::string &filename, int ***image, const int width, const int height)
+void save_ppm(const std::string &filename, int ***image, const int width, const int height)
 {
     std::ofstream outFile;
     outFile.open(filename);
