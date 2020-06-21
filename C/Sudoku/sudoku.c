@@ -64,7 +64,7 @@ int main(void)
 
     while (1)
     {
-        system("clear");
+        system("cls");
         display(array);
 
         if (numberEmptySpaces < 0)
@@ -168,10 +168,10 @@ void deallocateStuff(char **array)
 
 char **allocateArray()
 {
-    char **array = (char**)malloc(sizeof(char *[9]));
+    char **array = (char **)malloc(sizeof(char *[9]));
     for (int i = 0; i < 9; i++)
     {
-        array[i] = (char*)malloc(sizeof(char[9]));
+        array[i] = (char *)malloc(sizeof(char[9]));
     }
 
     for (int i = 0; i < 9; i++)
@@ -826,7 +826,7 @@ void setInitialPosition(char **array, int *xCoord, int *yCoord)
 
 void welcomeScreen(char **array)
 {
-    system("clear");
+    system("cls");
     display(array);
     puts("Welcome to the adventure Sudoku!");
     puts("X marks what your current selection is.");
@@ -846,7 +846,7 @@ void welcomeScreen(char **array)
 
 void helpKeyPressed(char **array)
 {
-    system("clear");
+    system("cls");
     display(array);
     puts("X marks what your current selection is.");
     puts("Press 'W' to move the selection up, 'S' to move down, 'A' to move to the left, and 'D' to move to the right.");
@@ -897,7 +897,7 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
 
     while (1)
     {
-        system("clear");
+        system("cls");
         display(array);
         puts("Erase mode is activated");
         puts("Press ENTER to erase the selected number");
@@ -905,7 +905,7 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
 
         if (val == 83)
         {
-            system("clear");
+            system("cls");
             display(array);
 
             int x = *xCoord;
@@ -1160,31 +1160,9 @@ void cleanUpDisplayArray(char **array)
     {
         for (int x = 0; x < 9; x++)
         {
-            switch (array[y][x])
+            if(!isdigit(array[y][x]))
             {
-            case '1':
-                break;
-            case '2':
-                break;
-            case '3':
-                break;
-            case '4':
-                break;
-            case '5':
-                break;
-            case '6':
-                break;
-            case '7':
-                break;
-            case '8':
-                break;
-            case '9':
-                break;
-            case 'X':
-                break;
-            default:
                 array[y][x] = ' ';
-                break;
             }
         }
     }
@@ -1208,7 +1186,7 @@ void locateSelection(char **array)
             }
         }
     }
-    system("clear");
+    system("cls");
     printf("      %c | %c | %c || %c | %c | %c || %c | %c | %c  \n", copyArray[0][0], copyArray[0][1], copyArray[0][2], copyArray[0][3], copyArray[0][4], copyArray[0][5], copyArray[0][6], copyArray[0][7], copyArray[0][8]);
     printf("     _____________________________________\n");
     printf("      %c | %c | %c || %c | %c | %c || %c | %c | %c  \n", copyArray[1][0], copyArray[1][1], copyArray[1][2], copyArray[1][3], copyArray[1][4], copyArray[1][5], copyArray[1][6], copyArray[1][7], copyArray[1][8]);
