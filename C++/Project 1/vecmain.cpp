@@ -30,9 +30,9 @@ int main()
 
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 5;         // num colors, k set to 7 for example
+    int k = 7;         // num colors, k set to 7 for example
     int width, height; // Declare width and height variables so can can pass by reference
-    std::string openFile = "Southeast_Steam_Plant-University_of_Minnesota-large.ppm";
+    std::string openFile = "Platonic_figure_at_UMN-tiny.ppm";
 
     get_widthAndheight(width, height, openFile); // Get width and height returned by reference
 
@@ -57,11 +57,11 @@ int main()
         update_assignments(image, assignments, width, height, means_list);
         update_means(image, assignments, width, height, means_list, k);
         
-        std::cout<<std::endl;
-        for (int i = 0; i < k; i++)
-        {
-            std::cout << "Means_List after update: " << means_list[i].r << " " << means_list[i].g << " " << means_list[i].b << std::endl;
-        }
+        // std::cout<<std::endl;
+        // for (int i = 0; i < k; i++)
+        // {
+        //     std::cout << "Means_List after update: " << means_list[i].r << " " << means_list[i].g << " " << means_list[i].b << std::endl;
+        // }
     } while (old_assignments != assignments);
     
     label(image, assignments, width, height, means_list);

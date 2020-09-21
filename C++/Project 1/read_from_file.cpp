@@ -2,7 +2,6 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <tuple>
 
 using namespace std;
 
@@ -10,7 +9,7 @@ int main()
 {
     ifstream myFile; // declare ifstream object
 
-    myFile.open("Peik_Hall_University_of_Minnesota_5-tiny.ppm"); //open file
+    myFile.open("test.ppm"); //open file
 
     string reader; // declare function to read strings from file into
     vector<string> list; // declare vector to hold file

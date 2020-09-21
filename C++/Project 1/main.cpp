@@ -20,7 +20,7 @@ int main()
 {
     srand(time(NULL)); // seeding time thingy..
 
-    int k = 3; // num colors, k set to 7 for example
+    int k = 1; // num colors, k set to 7 for example
 
     int width, height; // Declare width and height variables so can can pass by reference
 
@@ -64,11 +64,9 @@ int main()
     read_ppm(width, height, image); // get image data
 
     means_list = first_guess(k, means_list); // populate means list with random colors
-    
     update_assignments(image, assignment_list, width, height, means_list, k);
 
     bool bothListsEqual;
-
     int old_assignments[width][height][1];
 
     do
@@ -78,9 +76,11 @@ int main()
             for (int j = 0; j < width; j++)
             {
                 old_assignments[j][i][0] = assignment_list[j][i][0];
-                std::cout<<assignment_list[j][i][0]<<" ";
             }
         }
+
+        update_means(image, assignment_list, width, height, means_list, k, MAX_SIZE);
+        update_assignments(image, assignment_list, width, height, means_list, k);
 
         bothListsEqual = true;
 
@@ -94,18 +94,6 @@ int main()
                 }
             }
         }
-
-        for(int i = 0; i < k; i++)
-        {
-            std::cout<<"Means list is as follows:"<<std::endl;
-            std::cout<<means_list[i][0]<<std::endl;
-            std::cout<<means_list[i][1]<<std::endl;
-            std::cout<<means_list[i][2]<<std::endl<<std::endl;
-
-        }
-        update_means(image, assignment_list, width, height, means_list, k, MAX_SIZE);
-        update_assignments(image, assignment_list, width, height, means_list, k);
-
     } while (!bothListsEqual);
 
     label(image, assignment_list, means_list, width, height);
@@ -152,7 +140,7 @@ void read_ppm(const int width, const int height, int ***image)
 {
     std::ifstream myFile; // declare ifstream object
 
-    myFile.open("Southeast_Steam_Plant-University_of_Minnesota-large.ppm"); //open file
+    myFile.open("Platonic_figure_at_UMN-tiny.ppm"); //open file
 
     std::string reader;  // declare function to read strings from file into
     std::vector<std::string> list; // declare vector to hold file
@@ -213,12 +201,14 @@ void read_ppm(const int width, const int height, int ***image)
             }
         }
     }
+
+    myFile.close();
 }
 
 void get_widthAndheight(int &width, int &height)
 {
     std::ifstream myFile;                                        // declare ifstream object
-    myFile.open("Peik_Hall_University_of_Minnesota_5-tiny.ppm"); //open file
+    myFile.open("Platonic_figure_at_UMN-tiny.ppm"); //open file
     std::string reader;
 
     std::string type;
@@ -250,6 +240,8 @@ void get_widthAndheight(int &width, int &height)
         height = stoi(height1); // cast the string values for height and width to ints
         width = stoi(width1);
     }
+
+    myFile.close();
 }
 
 int random_color()
@@ -332,15 +324,6 @@ void update_assignments(int ***image, int ***assignments_list, const int width, 
                 }
             }
 
-            for(int i = 0; i < k; i++)
-            {
-                std::cout<<"Means list is as follows in assignments list function:"<<std::endl;
-                std::cout<<means_list[i][0]<<std::endl;
-                std::cout<<means_list[i][1]<<std::endl;
-                std::cout<<means_list[i][2]<<std::endl<<std::endl;
-
-            }
-
             assignments_list[j][i][0] = smallest;
         }
     }
@@ -400,9 +383,6 @@ void label(int ***image, int ***assignments_list, int **means_list, const int wi
             image[j][i][1] = means_list[index][1];
             image[j][i][2] = means_list[index][2];
 
-            std::cout<<image[j][i][0]<<" ";
-            std::cout<<image[j][i][1]<<" ";
-            std::cout<<image[j][i][2]<<" ";
         }
     }
 }

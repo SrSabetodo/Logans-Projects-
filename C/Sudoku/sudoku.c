@@ -209,7 +209,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
             {
                 *xCoord -= 1;
             }
-            counter += 1;
+            counter++;
 
             if (counter > 10)
             {
@@ -232,7 +232,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
             {
                 *yCoord -= 1;
             }
-            counter += 1;
+            counter ++;
 
             if (counter > 10)
             {
