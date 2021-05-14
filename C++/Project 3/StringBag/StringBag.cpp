@@ -1,101 +1,62 @@
 #include "StringBag.h"
-#include <cctype>
-#include <time.h>
-#include <cstdlib>
-#include <sstream>
 
-StringBag::StringBag() {}
-
-void StringBag::add(std::string addMe)
+stringBag_t StringBag::getBag()
 {
-    int length = 0;
-
-    std::string *stringArray = StringBag::returnWordsInString(addMe, length);
-
-    for(int i = 0; i < length; i++)
-    {
-        bag.insert(stringArray[i]);
-        std::cout << stringArray[i] << " inserted" << std::endl;
-    }
-    
-    delete [] stringArray;
+    return bagVec;
 }
 
-void StringBag::remove(std::string removeMe)
+void StringBag::add(const std::string &addMe)
 {
-    bag.erase(removeMe);
+    bagVec.insert(std::upper_bound(bagVec.begin(), bagVec.end(), addMe), addMe);
 }
 
-int StringBag::getCount(std::string findCount)
+void StringBag::remove(const std::string &removeMe)
 {
-    std::string newstring = "";
+    bagVec.erase(std::lower_bound(bagVec.begin(), bagVec.end(), removeMe));
+}
 
-    for (int i = 0; i < findCount.length(); i++)
+int StringBag::getCount(const std::string countof)
+{
+    iterator_t it = std::lower_bound(bagVec.begin(), bagVec.end(), countof); // get first occurance of element in vector
+
+    int count = 0;
+
+    for (; *it == countof; it++) // since they will all be next to each other, we only need to look while it == countof
     {
-        if (isupper(findCount[i]))
-        {
-            findCount[i] = tolower(findCount[i]);
-        }
-
-        if (isspace(findCount[i]) || isalpha(findCount[i]))
-        {
-            newstring += findCount[i];
-        }
+        count++;
     }
 
-    return bag.count(newstring);
+    return count;
 }
 
 int StringBag::getSize()
 {
-    return bag.size();
+    return bagVec.size();
 }
 
-std::string StringBag::getRandomString()
+std::ostream &operator<<(std::ostream &os, StringBag &bag)
 {
-    if (bag.empty())
+    os << "StringBag{";
+
+    int counter = 0;
+
+    for(; counter != bag.getSize(); counter++)
     {
-        return ".";
-    }
-
-    int count = rand() % bag.size();
-
-    std::unordered_multiset<std::string>::iterator it = bag.begin();
-
-    for (; it != bag.end(); it++)
-    {
-        count -= bag.count(*it);
-        if (count < 0)
+        if(counter == 0)
         {
-            return *it;
+            os << bag.getBag()[counter] << ":" << bag.getCount(bag.getBag()[counter]) << ", ";
+        }
+        else if(counter > 0 && bag.getBag()[counter-1] != bag.getBag()[counter])
+        {
+            os << bag.getBag()[counter] << ":" << bag.getCount(bag.getBag()[counter]) << ", ";
+        }
+        else
+        {
+            continue;
         }
     }
-    return ".";
-}
 
-std::unordered_multiset<std::string>  StringBag::returnBag()
-{
-    return bag;
-}
-
-std::ostream &operator<<(std::ostream &os, StringBag bag)
-{
-    std::string returner = "";
+    os << "}"; 
     
-    std::unordered_multiset<std::string>::iterator it = bag.returnBag().begin();
-
-    for (; it != bag.returnBag().end(); ++it)
-    {
-        std::ostringstream oss;
-        returner += *it + ":";
-        int count = bag.returnBag().count(*it);
-        oss << count;
-        returner += oss.str() + ",";
-    }
-
-    returner = "StringBag{" + returner + "}";
-
-    os << returner;
-
     return os;
 }

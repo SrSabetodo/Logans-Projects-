@@ -1,61 +1,49 @@
 #include "StringBag.h"
-#include <cctype>
-#include <time.h>
-#include <cstdlib>
-#include <string>
-#include <unordered_set>
 
 int main()
 {
-    StringBag cb;
+    using std::cout;
+    using std::endl;
 
-    for(char c = 'a'; c <= 'z'; c++)
-    {   
-        std::string thiss = "";
-        thiss += c;
-        if(cb.getCount(thiss) != 0)
-        {
-            std::cout << "Test failed -- empty CharBag has something in it!" << std::endl;
-        }
-    }
-    cb.add("a");
-    std::cout<<cb.getCount("a")<<std::endl; // 1
-    std::cout<<cb.getSize()<<std::endl; // 1
+    StringBag bag;
 
+    cout << (bag.getBag().empty() ? "true\n" : "false\n");
 
-    std::string tester = "a";
-    for(int i = 0; i < 100; i++)
+    bag.add("hello mate!");
+
+    cout << (bag.getBag().empty() ? "true\n" : "false\n");
+
+    bag.add("bread and butter");
+    bag.add("apples and oranges");
+    bag.add("apples and oranges");
+    bag.add("bread and butter");
+
+    for(std::string i : bag.getBag())
     {
-        int x = tester.compare(cb.getRandomString());
-        if(x != 0)
-        {
-            std::cout<<"Test failed -- charBag should only randomly generate \"a\""<<std::endl;
-        }
-        // else if(x == 0)
-        // {
-        //     std::cout<<"yaaaaay! it generated the right string!!"<<std::endl;
-        // }
+        cout << i << endl;
     }
 
-    cb.remove("a");
-    std::unordered_multiset<std::string> testingBag = cb.returnBag();
-    std::unordered_multiset<std::string>::iterator it = testingBag.begin();
-    for(; it!= testingBag.end(); it++)
+    bag.remove("bread and butter");
+
+    puts("");
+
+    for(std::string i : bag.getBag())
     {
-        if(cb.getCount(*it) != 0)
-        {
-            std::cout<<"Test failed -- empty StringBag has something in it!"<<std::endl;
-        }
-        else
-        {
-            std::cout<<"Yaaay! The StringBag was empty when it was supposed to be!"<<std::endl;
-        }
+        cout << i << endl;
     }
 
-    std::string toAdd = "Hello my name is Logan";
-    cb.add(toAdd);
-    std::cout << cb << std::endl;
+    puts("");
 
+    cout << "count of apples and oranges is : " << bag.getCount("apples and oranges") << endl;
+    cout << "size is: " << bag.getSize() << endl;
+
+    // iterator_t it = bag.getBag().begin();
     
+    // for(iterator_t iter = bag.getBag().begin(); iter < bag.getBag().end(); iter++)
+    // {
+    //     std::cout << *iter << std::endl;
+    // }
+
+    cout << bag << endl;//
     return 0;
 }
