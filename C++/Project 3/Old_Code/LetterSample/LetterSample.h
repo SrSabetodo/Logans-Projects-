@@ -1,3 +1,8 @@
+/**
+ * @author Logan Kreun
+ * @brief  LetterSample Class 
+ * @details This class is used to break down sentences into words 
+ */
 #include <string>
 #include <vector>
 

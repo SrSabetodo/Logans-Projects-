@@ -1,8 +1,13 @@
+/**
+ * @author Logan Kreun 
+ */ 
+
 #include "LetterSample.h"
 #include <iostream>
 #include <string>
 #include <cctype>
 #include <vector>
+
 
 LetterSample::LetterSample(std::string segmentString, char nextLetter)
 {
@@ -25,6 +30,7 @@ std::ostream& operator<< (std::ostream& os, LetterSample& sample)
     os << "\"" << sample.segmentString << "\"" << " -> " << sample.nextLetter;
     return os;
 }
+
 
 std::vector<LetterSample> LetterSample::toSamples(std::string input, int segmentSize)
 {
