@@ -213,7 +213,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
 
             if (counter > 10)
             {
-                findOpenSpaceAorD(array, *&xCoord, *&yCoord);
+                findOpenSpaceAorD(array, xCoord, yCoord);
             }
 
         } while (array[*yCoord][*xCoord] != ' ');
@@ -236,7 +236,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
 
             if (counter > 10)
             {
-                findOpenSpaceWorS(array, *&xCoord, *&yCoord);
+                findOpenSpaceWorS(array, xCoord, yCoord);
             }
 
         } while (array[*yCoord][*xCoord] != ' ');
@@ -259,7 +259,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
 
             if (counter > 10)
             {
-                findOpenSpaceAorD(array, *&xCoord, *&yCoord);
+                findOpenSpaceAorD(array, xCoord, yCoord);
             }
 
         } while (array[*yCoord][*xCoord] != ' ');
@@ -282,7 +282,7 @@ void processInput(char **array, int value, int *xCoord, int *yCoord, int *old_XC
 
             if (counter > 10)
             {
-                findOpenSpaceWorS(array, *&xCoord, *&yCoord);
+                findOpenSpaceWorS(array, xCoord, yCoord);
             }
 
         } while (array[*yCoord][*xCoord] != ' ');
@@ -409,11 +409,11 @@ void setSpaceToX(char **array, int *xCoord, int *yCoord, int *old_XCoord, int *o
 
 void numberEntered(char **array, int *xCoord, int *yCoord, char key, int *numSpaces)
 {
-    if (isValidInSquare(array, *&xCoord, *&yCoord, key) && isValidUpAndAcross(array, *&xCoord, *&yCoord, key))
+    if (isValidInSquare(array, xCoord, yCoord, key) && isValidUpAndAcross(array, xCoord, yCoord, key))
     {
         array[*yCoord][*xCoord] = key;
         *numSpaces -= 1;
-        moveSelectionAfterPlacement(array, *&xCoord, *&yCoord);
+        moveSelectionAfterPlacement(array, xCoord, yCoord);
     }
 }
 
@@ -474,7 +474,7 @@ void backSpacePressed(char **array, int *xCoord, int *yCoord)
         {
             *xCoord = x;
             *yCoord = y;
-            setSpaceToX(array, *&xCoord, *&yCoord, &old_xCoord, &old_yCoord);
+            setSpaceToX(array, xCoord, yCoord, &old_xCoord, &old_yCoord);
             return;
         }
         else
@@ -524,7 +524,7 @@ void backSlashPressed(char **array, int *xCoord, int *yCoord)
         {
             *xCoord = x;
             *yCoord = y;
-            setSpaceToX(array, *&xCoord, *&yCoord, &old_xCoord, &old_yCoord);
+            setSpaceToX(array, xCoord, yCoord, &old_xCoord, &old_yCoord);
             return;
         }
         else
@@ -948,7 +948,7 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
         {
             array[old_YCoord][old_XCoord] = previousKey;
 
-            deleteMove(array, *&xCoord, *&yCoord, val, controlArray);
+            deleteMove(array, xCoord, yCoord, val, controlArray);
 
             old_XCoord = *xCoord;
             old_YCoord = *yCoord;
@@ -963,14 +963,14 @@ void deleteMode(char **array, int *xCoord, int *yCoord, char **controlArray)
         }
         else if (val == 8)
         {
-            deleteBackSpacePressed(controlArray, array, *&xCoord, *&yCoord, previousKey);
+            deleteBackSpacePressed(controlArray, array, xCoord, yCoord, previousKey);
 
             old_XCoord = *xCoord;
             old_YCoord = *yCoord;
         }
         else if (val == 92)
         {
-            deleteBackSlashPressed(controlArray, array, *&xCoord, *&yCoord, previousKey);
+            deleteBackSlashPressed(controlArray, array, xCoord, yCoord, previousKey);
 
             old_XCoord = *xCoord;
             old_YCoord = *yCoord;
@@ -1003,7 +1003,7 @@ void deleteMove(char **array, int *xCoord, int *yCoord, int value, char **contro
 
                 if (counter > 10)
                 {
-                    deleteModeFindOpenSpaceAorD(controlArray, *&xCoord, *&yCoord);
+                    deleteModeFindOpenSpaceAorD(controlArray, xCoord, yCoord);
                 }
 
             } while (controlArray[*yCoord][*xCoord] != '1');
@@ -1026,7 +1026,7 @@ void deleteMove(char **array, int *xCoord, int *yCoord, int value, char **contro
 
                 if (counter > 10)
                 {
-                    deleteModeFindOpenSpaceWorS(controlArray, *&xCoord, *&yCoord);
+                    deleteModeFindOpenSpaceWorS(controlArray, xCoord, yCoord);
                 }
 
             } while (controlArray[*yCoord][*xCoord] != '1');
@@ -1049,7 +1049,7 @@ void deleteMove(char **array, int *xCoord, int *yCoord, int value, char **contro
 
                 if (counter > 10)
                 {
-                    deleteModeFindOpenSpaceAorD(controlArray, *&xCoord, *&yCoord);
+                    deleteModeFindOpenSpaceAorD(controlArray, xCoord, yCoord);
                 }
 
             } while (controlArray[*yCoord][*xCoord] != '1');
@@ -1072,7 +1072,7 @@ void deleteMove(char **array, int *xCoord, int *yCoord, int value, char **contro
 
                 if (counter > 10)
                 {
-                    deleteModeFindOpenSpaceWorS(controlArray, *&xCoord, *&yCoord);
+                    deleteModeFindOpenSpaceWorS(controlArray, xCoord, yCoord);
                 }
 
             } while (controlArray[*yCoord][*xCoord] != '1');
